@@ -121,6 +121,7 @@ using System;
                         else if (commandStringSplit[0] == "left") { commands.Add(new TurnCommand('L')); }
                         else { Console.WriteLine(commandString + "is not in a valid format "); return null; }
                         break;
+                        //Hier moet nog de repeat command. Maar die is helaas nog niet af.
 
                 }
                 
