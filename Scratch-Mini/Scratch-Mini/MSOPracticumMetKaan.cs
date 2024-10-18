@@ -3,12 +3,13 @@ using System;
  namespace ScratchMini {
     class MainProgram
     {
+        ICommandLine iCommandLine;
         public void Main()
         {
-            
+            iCommandLine = new ICommandLine();
         }
     }
-    class Program
+    public class Program
     {
         public string name;
         List <ICommand> Commands;
@@ -27,19 +28,109 @@ using System;
         
     }
 
-    class ICommandLine
+    public class ICommandLine
     {
         Program basicP;
         Program advanced;
         Program extreme;
         Program loaded;
-        public Program Import()
+
+        public ICommandLine()
         {
-            throw new NotImplementedException();
+            Interact();
+        }
+
+        public void Interact()
+        {
+            Console.WriteLine("Do you want to play a random program (R) or do you want to import a program (I)");
+            string answer = Console.ReadLine();
+
+            if (answer.ToLower() == "r")
+            {
+                if (loaded != null)
+                {
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 5);
+                    switch (randomNumber)
+                    {
+                        case 1:
+                            ExecuteProgram(basicP);
+                            break;
+                        case 2:
+                            ExecuteProgram(advanced);
+                            break;
+                        case 3:
+                            ExecuteProgram(extreme);
+                            break;
+                        case 4:
+                            ExecuteProgram(loaded);
+                            break;
+                    }
+                }
+                else
+                {
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 4);
+                    switch (randomNumber)
+                    {
+                        case 1:
+                            ExecuteProgram(basicP);
+                            break;
+                        case 2:
+                            ExecuteProgram(advanced);
+                            break;
+                        case 3:
+                            ExecuteProgram(extreme);
+                            break;
+                    }
+                }
+            }
+            if (answer.ToLower() == "i")
+            {
+                loaded = Import(answer);
+                if (loaded == null)
+                {
+                    Interact();
+                }
+            }
+            else
+            {
+                Console.WriteLine(answer + " is not a accepted answer.");
+                Interact();
+            }
+        }
+
+        public Program Import(string input)
+        {
+            string[] inputSplit = input.Split(",");
+            List<ICommand> commands = new List<ICommand>();
+            foreach (string commandString in inputSplit)
+            {
+                string[] commandStringSplit = commandString.Split(" ");
+                switch (commandStringSplit[0])
+                {
+                    case "Move":
+                        try
+                        {
+                            commands.Add(new MoveCommand(int.Parse(commandStringSplit[1])));
+                        }
+                        catch { Console.WriteLine(commandString + "is not in a valid format "); return null; }
+                        break;
+                    case "Turn":
+                        if(commandStringSplit[0] == "right") { commands.Add(new TurnCommand('R')); }
+                        else if (commandStringSplit[0] == "left") { commands.Add(new TurnCommand('L')); }
+                        else { Console.WriteLine(commandString + "is not in a valid format "); return null; }
+                        break;
+
+                }
+                
+
+            }
+            return new Program(commands);
         }
         public void ExecuteProgram(Program program)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(program.Execute()); //hier moet nog de keuzen tussen metrics en program output
         }
 
     }
@@ -119,6 +210,11 @@ using System;
         char turn;
         public override string Name { get { return "Turn command"; } }
 
+        public TurnCommand(char turn)
+        {
+            this.turn = turn;
+        }
+
         public override Field executeCommand(Field field)
         {
             throw new NotImplementedException();
@@ -129,6 +225,10 @@ using System;
         int steps;
 
         public override string Name { get { return "Move command"; } }
+        public MoveCommand(int steps)
+        {
+            this.steps = steps;
+        }
 
         public override Field executeCommand(Field field)
         {
