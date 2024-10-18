@@ -1,55 +1,91 @@
 using System;
 
-public namespace ScratchMini {
-    class Main
+ namespace ScratchMini {
+    class MainProgram
     {
-        static void Main()
+        public void Main()
         {
             
         }
     }
     class Program
     {
-        String name;
+        public string name;
         List <ICommand> Commands;
         Field currentField;
 
-        void Execute();
+        public Program(List<ICommand> commands)
+        {
+            Commands = commands;
+
+        }
+
+        public string Execute()
+        {
+            throw new NotImplementedException();
+        }
         
     }
 
-    interface ICommandLine
+    class ICommandLine
     {
         Program basicP;
         Program advanced;
         Program extreme;
         Program loaded;
-        Program Import()
-        void ExecuteProgram();
+        public Program Import()
+        {
+            throw new NotImplementedException();
+        }
+        public void ExecuteProgram(Program program)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 
-    public class Player : GridObject
+    public class Player : IGridObject
     {
-        public String image;
-        public CardinalDirection cardinalDirection;
-
-        public Player()
+        public string Image ;
+        public CardinalDirection CardinalDirection;
+        public override string Name { get { return "Player"; } }
+        public Player(CardinalDirection direction)
         {
-            image = "defaultImage";
-            cardinalDirection = cardinalDirection.East;
+            Image = "defaultImage";
+            CardinalDirection = direction;
+        }
+
+        
+    }
+
+    public class Field 
+    {
+        IGridObject[,] Grid;
+        /// <summary>
+        /// For a Initial Empty field
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public Field()
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Field(IGridObject[,] grid)
+        {
+            Grid = grid;
         }
     }
 
-    class Field : IGridObject
+    public abstract class IGridObject
     {
-        IGridObject[,] Grid;
+        public abstract string Name {  get; }
+    }
+    public class EmptySpace : IGridObject
+    {
+        public override string Name { get { return "Empty Space"; } }
     }
 
-    interface IGridObject{}
-    class EmptySpace : IGridObject{}
-
-    enum CardinalDirection
+    public enum CardinalDirection
     {
         Nort,
         South, 
@@ -57,31 +93,47 @@ public namespace ScratchMini {
         West
     }
 
-    interface ICommand
+    public abstract class ICommand
     {
-        String name;
-        Field executeCommand(Field field){}
+        public abstract string Name { get; }
+        public abstract Field executeCommand(Field field);
     }
 
-    class RepeatCommand : ICommand {
-    String name;
-    Int times;
-    List<ICommand> commands
-    public Field executeCommand(Field field){}
+    public class RepeatCommand : ICommand {
+        int times;
+        List<ICommand> commands;
+        public override string Name { get { return "Repeat command"; } }
 
+        public RepeatCommand(int times , List<ICommand> commands)
+        {
+            this.times = times;
+            this.commands = commands;
+        }
+        public override Field executeCommand(Field field)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    class TurnCommand : ICommand {
-        String name;
-        Char turn;
-        public Field executeCommand(Field field){}
+    public class TurnCommand : ICommand {
+        char turn;
+        public override string Name { get { return "Turn command"; } }
+
+        public override Field executeCommand(Field field)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     class MoveCommand : ICommand {
-        String name;
-        Int steps;
-        public Field executeCommand(Field field)
-    }
+        int steps;
 
+        public override string Name { get { return "Move command"; } }
+
+        public override Field executeCommand(Field field)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
