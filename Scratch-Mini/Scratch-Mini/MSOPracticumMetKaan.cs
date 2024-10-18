@@ -1,6 +1,7 @@
 using System;
+using System.Diagnostics;
 
- namespace ScratchMini {
+namespace ScratchMini {
     class MainProgram
     {
         public void Main()
@@ -60,7 +61,7 @@ using System;
 
     public class Field 
     {
-        IGridObject[,] Grid;
+        public IGridObject[,] Grid;
         /// <summary>
         /// For a Initial Empty field
         /// </summary>
@@ -87,11 +88,13 @@ using System;
 
     public enum CardinalDirection
     {
-        Nort,
-        South, 
+        North,
         East, 
+        South, 
         West
     }
+
+
 
     public abstract class ICommand
     {
@@ -116,23 +119,109 @@ using System;
     }
 
     public class TurnCommand : ICommand {
-        char turn;
+        char turn; // 'L' to turn left, 'R' to turn right. 
         public override string Name { get { return "Turn command"; } }
 
+        public TurnCommand(char turnDirection)
+        {
+            turn = turnDirection;
+        }
         public override Field executeCommand(Field field)
         {
-            throw new NotImplementedException();
+            foreach (IGridObject o in field.Grid)
+            {
+                if (o.Name == "Player")
+                {
+                    Player player = o as Player;
+                    player.CardinalDirection = newDirection(player.CardinalDirection, turn);
+                }
+            }
+            
+            return field; 
         }
+
+        private CardinalDirection newDirection(CardinalDirection direction, Char turnDirection)
+        {
+            int next;
+            if (turnDirection == 'R')
+            {
+                next = (int)direction + 1;
+                if (next > (int)CardinalDirection.West)
+                {
+                    next = (int)CardinalDirection.North;
+                }
+            }
+            else
+            {
+                next = (int)direction - 1;
+                if (next < (int)CardinalDirection.North)
+                {
+                    next = (int)CardinalDirection.West;
+                }
+            }
+
+            return (CardinalDirection)next;
+
+        }
+
     }
 
     class MoveCommand : ICommand {
+        
         int steps;
+
+        public MoveCommand(int steps)
+        {
+            this.steps = steps;
+        }
 
         public override string Name { get { return "Move command"; } }
 
         public override Field executeCommand(Field field)
         {
+            //not done yet
+            /*
+            int playerX = -1;
+            int playerY = -1; 
+            for (int x = 0; x < field.Grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < field.Grid.GetLength(1); y++)
+                {
+                    if (field.Grid[x, y].Name == "Player")
+                    {
+                        playerX = x;
+                        playerY = y;
+                        break;
+                    }
+                }
+                if (playerX != -1 && playerY != -1)
+                {
+                    break; // to stop the initial loop
+                }
+
+            }
+            Player player = (Player)field.Grid[playerX, playerY];
+
+            for (int i = 0; i < steps; i++)
+            {
+
+            }
+            */
+
+
+
             throw new NotImplementedException();
+        }
+
+        private (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private bool isInsideBounds(int x, int y, IGridObject[,] grid)
+        {
+            return x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1);
         }
     }
 }
