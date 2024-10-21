@@ -206,7 +206,15 @@ namespace ScratchMini {
         }
         public override Field executeCommand(Field field)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < times; i++)
+            {
+                foreach (ICommand command in commands)
+                {
+                    field = command.executeCommand(field);
+                }
+            }
+
+            return field;
         }
     }
 
@@ -225,14 +233,14 @@ namespace ScratchMini {
                 if (o.Name == "Player")
                 {
                     Player player = o as Player;
-                    player.CardinalDirection = newDirection(player.CardinalDirection, turn);
+                    player.CardinalDirection = NewDirection(player.CardinalDirection, turn);
                 }
             }
             
             return field; 
         }
 
-        private CardinalDirection newDirection(CardinalDirection direction, Char turnDirection)
+        private static CardinalDirection NewDirection(CardinalDirection direction, Char turnDirection)
         {
             int next;
             if (turnDirection == 'R')
@@ -268,15 +276,11 @@ namespace ScratchMini {
         }
 
         public override string Name { get { return "Move command"; } }
-        public MoveCommand(int steps)
-        {
-            this.steps = steps;
-        }
 
         public override Field executeCommand(Field field)
         {
-            //not done yet
-            /*
+            
+            
             int playerX = -1;
             int playerY = -1; 
             for (int x = 0; x < field.Grid.GetLength(0); x++)
@@ -285,8 +289,8 @@ namespace ScratchMini {
                 {
                     if (field.Grid[x, y].Name == "Player")
                     {
-                        playerX = x;
-                        playerY = y;
+                        playerX = x; //current x coordinate of the player object
+                        playerY = y; //current y coordinate of the player object
                         break;
                     }
                 }
@@ -296,26 +300,58 @@ namespace ScratchMini {
                 }
 
             }
-            Player player = (Player)field.Grid[playerX, playerY];
 
-            for (int i = 0; i < steps; i++)
+            if (playerX != -1 && playerY != -1)
             {
+                Player player = (Player)field.Grid[playerX, playerY];
 
+                for (int i = 0; i < steps; i++)
+                {
+                    (int newX, int newY) = CalculateNewPosition(playerX, playerY, player.CardinalDirection);
+
+                    if (IsInsideBounds(newX, newY, field.Grid)) //check if the new position is inside of the boundaries
+                    {
+                        if (field.Grid[newX, newY] is EmptySpace) //check if the new position is an emptyspace
+                        {
+                            field.Grid[newX, newY] = player; //place player on the new position
+                            field.Grid[playerX, playerY] = new EmptySpace(); //turn the old playerposition into an empty space
+                            playerX = newX; 
+                            playerY = newY;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
-            */
 
-
-
-            throw new NotImplementedException();
+            return field;
         }
 
-        private (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
+        private static (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
         {
-            throw new NotImplementedException();
+            switch (direction)
+            {
+                case CardinalDirection.North:
+                    return (x - 1, y);
+                case CardinalDirection.East:
+                    return (x, y + 1);
+                case CardinalDirection.South:
+                    return (x + 1, y);
+                case CardinalDirection.West:
+                    return (x, y - 1);
+                default:
+                    return (x, y);
+            }
         }
 
 
-        private bool isInsideBounds(int x, int y, IGridObject[,] grid)
+        private static bool IsInsideBounds(int x, int y, IGridObject[,] grid)
         {
             return x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1);
         }
