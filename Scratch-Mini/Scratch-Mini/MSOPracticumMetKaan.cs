@@ -10,24 +10,7 @@ namespace ScratchMini {
             iCommandLine = new ICommandLine();
         }
     }
-    public class Program
-    {
-        public string name;
-        List <ICommand> Commands;
-        Field currentField;
-
-        public Program(List<ICommand> commands)
-        {
-            Commands = commands;
-
-        }
-
-        public string Execute()
-        {
-            throw new NotImplementedException();
-        }
-        
-    }
+    
 
     public class ICommandLine
     {
@@ -38,6 +21,21 @@ namespace ScratchMini {
 
         public ICommandLine()
         {
+            ICommand[] basicCommands = 
+                { new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R') };
+            basicP = new Program(basicCommands.ToList());
+
+            ICommand[] advacedCommands = 
+                { new RepeatCommand(4, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')})};
+            advanced = new Program(advacedCommands.ToList());
+
+            ICommand[] extremeCommands = 
+                { new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')}),
+                new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('L')})};
+            extreme = new Program(extremeCommands.ToList());
             Interact();
         }
 
@@ -85,25 +83,28 @@ namespace ScratchMini {
                             break;
                     }
                 }
+                
             }
-            if (answer.ToLower() == "i")
+            else if (answer.ToLower() == "i")
             {
+                answer = Console.ReadLine();
                 loaded = Import(answer);
                 if (loaded == null)
                 {
-                    Interact();
+                    
                 }
             }
             else
             {
                 Console.WriteLine(answer + " is not a accepted answer.");
-                Interact();
+                
             }
+            Interact();
         }
 
         public Program Import(string input)
         {
-            string[] inputSplit = input.Split(",");
+            string[] inputSplit = input.Split(", ");
             List<ICommand> commands = new List<ICommand>();
             foreach (string commandString in inputSplit)
             {
@@ -123,20 +124,43 @@ namespace ScratchMini {
                         else { Console.WriteLine(commandString + "is not in a valid format "); return null; }
                         break;
                         //Hier moet nog de repeat command. Maar die is helaas nog niet af.
-
                 }
-                
-
             }
             return new Program(commands);
         }
+
         public void ExecuteProgram(Program program)
         {
             Console.WriteLine(program.Execute()); //hier moet nog de keuzen tussen metrics en program output
         }
 
     }
+    public class Program
+    {
+        public string name;
+        List <ICommand> Commands;
+        Field startingField;
 
+        public Program(List<ICommand> commands)
+        {
+            Commands = commands;
+            startingField = new Field();
+
+        }
+
+        public string Execute()
+        {
+            Field currentField = startingField;
+            string commandLog = "";
+            foreach (ICommand command in Commands)
+            {
+                currentField = command.executeCommand(currentField);
+                commandLog += command.ToString() + ", ";
+            }
+            return commandLog;
+        }
+        
+    }
     public class Player : IGridObject
     {
         public string Image ;
@@ -147,8 +171,6 @@ namespace ScratchMini {
             Image = "defaultImage";
             CardinalDirection = direction;
         }
-
-        
     }
 
     public class Field 
@@ -160,7 +182,10 @@ namespace ScratchMini {
         /// <exception cref="NotImplementedException"></exception>
         public Field()
         {
-            throw new NotImplementedException();
+            Grid = new IGridObject[,]
+                { {new Player(CardinalDirection.East), new EmptySpace(), new EmptySpace() },
+                {new EmptySpace(), new EmptySpace(), new EmptySpace() },
+                {new EmptySpace(), new EmptySpace(), new EmptySpace() }};
         }
         
         public Field(IGridObject[,] grid)
@@ -192,6 +217,7 @@ namespace ScratchMini {
     {
         public abstract string Name { get; }
         public abstract Field executeCommand(Field field);
+        public abstract string ToString();
     }
 
     public class RepeatCommand : ICommand {
@@ -215,6 +241,17 @@ namespace ScratchMini {
             }
 
             return field;
+        }
+
+        public override string ToString()
+        {
+            string childrenStrings = "";
+            foreach (ICommand command in commands)
+            {
+                childrenStrings += command.ToString();
+            }
+
+            return "Repeat " + times.ToString() + "(" + childrenStrings + ")";
         }
     }
 
@@ -240,7 +277,7 @@ namespace ScratchMini {
             return field; 
         }
 
-        private static CardinalDirection NewDirection(CardinalDirection direction, Char turnDirection)
+        private CardinalDirection NewDirection(CardinalDirection direction, Char turnDirection)
         {
             int next;
             if (turnDirection == 'R')
@@ -264,6 +301,10 @@ namespace ScratchMini {
 
         }
 
+        public override string ToString()
+        {
+            return "Turn " + turn;
+        }
     }
 
     class MoveCommand : ICommand {
@@ -333,7 +374,7 @@ namespace ScratchMini {
             return field;
         }
 
-        private static (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
+        private (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
         {
             switch (direction)
             {
@@ -351,9 +392,14 @@ namespace ScratchMini {
         }
 
 
-        private static bool IsInsideBounds(int x, int y, IGridObject[,] grid)
+        private bool IsInsideBounds(int x, int y, IGridObject[,] grid)
         {
             return x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1);
+        }
+
+        public override string ToString()
+        {
+            return "Move " + steps.ToString();
         }
     }
 }
