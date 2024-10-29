@@ -76,5 +76,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scratch-Mini\Scratch-Mini.csproj">
+      <Project>{10e82a3a-ba19-40f8-9d04-92b34dd8c24a}</Project>
+      <Name>Scratch-Mini</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

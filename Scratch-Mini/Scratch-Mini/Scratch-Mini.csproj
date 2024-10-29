@@ -8,9 +8,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Scratch-Mini-Tester\Scratch-Mini-Tester.csproj" />
-    <ProjectReference Include="..\Scratch-Mini-UI\Scratch-Mini-UI.csproj" />
-  </ItemGroup>
-
 </Project>
