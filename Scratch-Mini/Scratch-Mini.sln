@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scratch-Mini", "Scratch-Mini\Scratch-Mini.csproj", "{10E82A3A-BA19-40F8-9D04-92B34DD8C24A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scratch-Mini", "Scratch-Mini\Scratch-Mini.csproj", "{10E82A3A-BA19-40F8-9D04-92B34DD8C24A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scratch-Mini-UI", "Scratch-Mini-UI\Scratch-Mini-UI.csproj", "{E4BE9BF2-CE4D-4E2A-A05B-EB5EB7BDAD3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scratch-Mini-Tester", "Scratch-Mini-Tester\Scratch-Mini-Tester.csproj", "{CE488BF6-A9BD-4DA0-A24E-558467970494}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{10E82A3A-BA19-40F8-9D04-92B34DD8C24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10E82A3A-BA19-40F8-9D04-92B34DD8C24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10E82A3A-BA19-40F8-9D04-92B34DD8C24A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4BE9BF2-CE4D-4E2A-A05B-EB5EB7BDAD3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4BE9BF2-CE4D-4E2A-A05B-EB5EB7BDAD3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4BE9BF2-CE4D-4E2A-A05B-EB5EB7BDAD3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4BE9BF2-CE4D-4E2A-A05B-EB5EB7BDAD3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE488BF6-A9BD-4DA0-A24E-558467970494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE488BF6-A9BD-4DA0-A24E-558467970494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE488BF6-A9BD-4DA0-A24E-558467970494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE488BF6-A9BD-4DA0-A24E-558467970494}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
