@@ -9,4 +9,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Scratch-Mini\Scratch-Mini.csproj" />
+  </ItemGroup>
+
 </Project>
