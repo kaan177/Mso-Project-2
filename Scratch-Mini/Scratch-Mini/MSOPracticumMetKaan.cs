@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ScratchMini {
     class MainProgram
@@ -145,7 +146,6 @@ namespace ScratchMini {
         {
             Commands = commands;
             startingField = new Field();
-
         }
 
         public string Execute()
@@ -161,6 +161,8 @@ namespace ScratchMini {
         }
         
     }
+    #region Playing Field
+
     public class Player : IGridObject
     {
         public string Image ;
@@ -171,8 +173,24 @@ namespace ScratchMini {
             Image = "defaultImage";
             CardinalDirection = direction;
         }
+        public (int newX, int newY) PositionInFront(int x, int y)
+        {
+            switch (CardinalDirection)
+            {
+                case CardinalDirection.North:
+                    return (x - 1, y);
+                case CardinalDirection.East:
+                    return (x, y + 1);
+                case CardinalDirection.South:
+                    return (x + 1, y);
+                case CardinalDirection.West:
+                    return (x, y - 1);
+                default:
+                    return (x, y);
+            }
+        }
     }
-
+    
     public class Field 
     {
         public IGridObject[,] Grid;
@@ -192,6 +210,39 @@ namespace ScratchMini {
         {
             Grid = grid;
         }
+
+        public (int,int) GetPlayerPosition()
+        {
+            int playerX = -1;
+            int playerY = -1;
+            for (int x = 0; x < Grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < Grid.GetLength(1); y++)
+                {
+                    if (Grid[x, y].Name == "Player")
+                    {
+                        playerX = x; //current x coordinate of the player object
+                        playerY = y; //current y coordinate of the player object
+                        break;
+                    }
+                }
+                if (playerX != -1 && playerY != -1)
+                {
+                    throw new Exception("Player not found in grid"); // to stop the initial loop
+                }
+            }
+            return (playerX, playerY);
+        }
+
+        public Player GetPlayer()
+        {
+            (int, int) playerPostion = GetPlayerPosition();
+            return (Player)Grid[playerPostion.Item1, playerPostion.Item2];
+        }
+        public bool IsInsideBounds(int x, int y)
+        {
+            return x >= 0 && x < Grid.GetLength(0) && y >= 0 && y < Grid.GetLength(1);
+        }
     }
 
     public abstract class IGridObject
@@ -203,6 +254,10 @@ namespace ScratchMini {
         public override string Name { get { return "Empty Space"; } }
     }
 
+    public class Wall : IGridObject
+    {
+        public override string Name { get { return "Wall"; } }
+    }
     public enum CardinalDirection
     {
         North,
@@ -210,8 +265,9 @@ namespace ScratchMini {
         South, 
         West
     }
+    #endregion
 
-
+    #region Commands
 
     public abstract class ICommand
     {
@@ -265,15 +321,8 @@ namespace ScratchMini {
         }
         public override Field executeCommand(Field field)
         {
-            foreach (IGridObject o in field.Grid)
-            {
-                if (o.Name == "Player")
-                {
-                    Player player = o as Player;
-                    player.CardinalDirection = NewDirection(player.CardinalDirection, turn);
-                }
-            }
-            
+            Player player = field.GetPlayer();
+            player.CardinalDirection = NewDirection(player.CardinalDirection, turn);
             return field; 
         }
 
@@ -282,20 +331,13 @@ namespace ScratchMini {
             int next;
             if (turnDirection == 'R')
             {
-                next = (int)direction + 1;
-                if (next > (int)CardinalDirection.West)
-                {
-                    next = (int)CardinalDirection.North;
-                }
+                next = ((int)direction + 1) % 4;
             }
-            else
+            else if (turnDirection == 'L')
             {
-                next = (int)direction - 1;
-                if (next < (int)CardinalDirection.North)
-                {
-                    next = (int)CardinalDirection.West;
-                }
+                next = ((int)direction - 1) % 4;
             }
+            else { throw new Exception("The direction was not left or right"); }
 
             return (CardinalDirection)next;
 
@@ -307,8 +349,8 @@ namespace ScratchMini {
         }
     }
 
-    class MoveCommand : ICommand {
-        
+    public class MoveCommand : ICommand {
+
         int steps;
 
         public MoveCommand(int steps)
@@ -320,87 +362,119 @@ namespace ScratchMini {
 
         public override Field executeCommand(Field field)
         {
-            
-            
-            int playerX = -1;
-            int playerY = -1; 
-            for (int x = 0; x < field.Grid.GetLength(0); x++)
+            (int playerX, int playerY) = field.GetPlayerPosition();
+
+
+            Player player = field.GetPlayer();
+
+            for (int i = 0; i < steps; i++)
             {
-                for (int y = 0; y < field.Grid.GetLength(1); y++)
+                (int newX, int newY) = player.PositionInFront(playerX, playerY);
+
+                if (field.IsInsideBounds(newX, newY)) //check if the new position is inside of the boundaries
                 {
-                    if (field.Grid[x, y].Name == "Player")
+                    if (field.Grid[newX, newY] is EmptySpace) //check if the new position is an emptyspace
                     {
-                        playerX = x; //current x coordinate of the player object
-                        playerY = y; //current y coordinate of the player object
-                        break;
-                    }
-                }
-                if (playerX != -1 && playerY != -1)
-                {
-                    break; // to stop the initial loop
-                }
-
-            }
-
-            if (playerX != -1 && playerY != -1)
-            {
-                Player player = (Player)field.Grid[playerX, playerY];
-
-                for (int i = 0; i < steps; i++)
-                {
-                    (int newX, int newY) = CalculateNewPosition(playerX, playerY, player.CardinalDirection);
-
-                    if (IsInsideBounds(newX, newY, field.Grid)) //check if the new position is inside of the boundaries
-                    {
-                        if (field.Grid[newX, newY] is EmptySpace) //check if the new position is an emptyspace
-                        {
-                            field.Grid[newX, newY] = player; //place player on the new position
-                            field.Grid[playerX, playerY] = new EmptySpace(); //turn the old playerposition into an empty space
-                            playerX = newX; 
-                            playerY = newY;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        field.Grid[newX, newY] = player; //place player on the new position
+                        field.Grid[playerX, playerY] = new EmptySpace(); //turn the old playerposition into an empty space
+                        playerX = newX;
+                        playerY = newY;
                     }
                     else
                     {
                         break;
                     }
                 }
+                else
+                {
+                    break;
+                }
             }
-
             return field;
         }
-
-        private (int newX, int newY) CalculateNewPosition(int x, int y, CardinalDirection direction)
-        {
-            switch (direction)
-            {
-                case CardinalDirection.North:
-                    return (x - 1, y);
-                case CardinalDirection.East:
-                    return (x, y + 1);
-                case CardinalDirection.South:
-                    return (x + 1, y);
-                case CardinalDirection.West:
-                    return (x, y - 1);
-                default:
-                    return (x, y);
-            }
-        }
-
-
-        private bool IsInsideBounds(int x, int y, IGridObject[,] grid)
-        {
-            return x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1);
-        }
+        
 
         public override string ToString()
         {
             return "Move " + steps.ToString();
         }
     }
+    public class ConditionalCommand : ICommand
+    {
+        List<ICommand> commands;
+        IConditional condition;
+
+        public ConditionalCommand(List<ICommand> commands, IConditional condition)
+        {
+            this.commands = commands;
+            this.condition = condition;
+        }
+        public override string Name { get { return "Conditionel command"; } }
+
+        public override Field executeCommand(Field field)
+        {
+            while (condition.CheckIfTrue(field))
+            {
+                foreach (ICommand command in commands) { field = command.executeCommand(field); }
+            }
+            return field;
+        }
+
+        public override string ToString()
+        {
+            string childrenStrings = "";
+            foreach (ICommand command in commands)
+            {
+                childrenStrings += command.ToString();
+            }
+
+            return "Repeat while " + condition.ToString() + "(" + childrenStrings + ")";
+        }
+    }
+
+    public abstract class IConditional
+    {
+        public abstract bool CheckIfTrue(Field field);
+
+        public abstract string ToString();
+    }
+
+    public class WallAheadConditionel : IConditional
+    {
+        public WallAheadConditionel() { }
+        public override bool CheckIfTrue(Field field)
+        {
+            (int xPos, int yPos) = field.GetPlayerPosition();
+            Player player = field.GetPlayer();
+            (int newX, int newY) = player.PositionInFront(xPos, yPos);
+            if(field.IsInsideBounds(newX, newY)) { return field.Grid[newX, newY] is Wall; }
+            else { return false; }
+        }
+        
+        public override string ToString()
+        {
+            return "is wall ahead";
+        }
+    }
+    public class GridAheadConditionel : IConditional
+    {
+        public GridAheadConditionel() { }
+
+        public override bool CheckIfTrue(Field field)
+        {
+            (int xPos, int yPos) = field.GetPlayerPosition();
+            Player player = field.GetPlayer();
+            (int newX, int newY) = player.PositionInFront(xPos, yPos);
+            return !field.IsInsideBounds(newX, newY);
+        }
+
+        public override string ToString()
+        {
+            return "is grid edge ahead";
+        }
+    }
+    #endregion
+
+
 }
 
