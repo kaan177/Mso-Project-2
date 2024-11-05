@@ -163,14 +163,18 @@ namespace ScratchMini {
     }
     public class Player : IGridObject
     {
-        public string Image ;
         public CardinalDirection CardinalDirection;
         public override string Name { get { return "Player"; } }
         public Player(CardinalDirection direction)
         {
-            Image = "defaultImage";
             CardinalDirection = direction;
         }
+    }
+
+    public class Wall : IGridObject
+    {
+        public override string Name { get { return "Wall";  } }
+
     }
 
     public class Field 
@@ -307,7 +311,7 @@ namespace ScratchMini {
         }
     }
 
-    class MoveCommand : ICommand {
+    public class MoveCommand : ICommand {
         
         int steps;
 
