@@ -183,7 +183,7 @@ namespace ScratchMini {
     public class Program
     {
         public string name;
-        List <ICommand> Commands;
+        public List <ICommand> Commands;
         Field startingField;
         public IGridObject[,] Grid;
 

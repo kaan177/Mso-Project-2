@@ -39,12 +39,21 @@ namespace Scratch_Mini_Forms
 
         private void ShowProgram(ScratchMini.Program program)
         {
-
+            SetupDialogue(program);
+            SetupGrid(program);
         }
 
         private void SetupDialogue(ScratchMini.Program program)
         {
+            UserInputTxtBox.Clear();
+            List <ICommand> commands = program.Commands;
+            string commandText = "";
+            foreach (ICommand command in commands)
+            {
+                commandText += command.ToString() + "\n";
+            }
 
+            UserInputTxtBox.Text = commandText.TrimEnd();
         }
 
         private void SetupGrid(ScratchMini.Program program)
@@ -52,8 +61,6 @@ namespace Scratch_Mini_Forms
             GridPanel.Controls.Clear();
 
             int size = program.Grid.GetLength(0);
-            
-
 
             int pWidth = GridPanel.ClientSize.Width / size;
             int pHeight = GridPanel.ClientSize.Height / size;
