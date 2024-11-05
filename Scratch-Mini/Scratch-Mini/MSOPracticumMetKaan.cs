@@ -21,23 +21,66 @@ namespace ScratchMini {
 
         public ICommandLine()
         {
+
+            IGridObject[,] basicGrid = new IGridObject[3, 3];
+            basicGrid[0, 1] = new Player(CardinalDirection.East);
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (basicGrid[i, j] == null)
+                    {
+                        basicGrid[i, j] = new EmptySpace();
+                    }
+                }
+            }
+
             ICommand[] basicCommands =
                 { new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R') };
-            IGridObject[,] basisGrid = {
-                {new EmptySpace() }, { new EmptySpace() },  }; 
-            basic = new Program(basicCommands.ToList(), new IGridObject[3,3]);
+            
+            basic = new Program(basicCommands.ToList(), basicGrid);
+
+            IGridObject[,] advancedGrid = new IGridObject[4, 4];
+            advancedGrid[4,0] = new Player(CardinalDirection.South);
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (advancedGrid[i, j] == null)
+                    {
+                        advancedGrid[i, j] = new EmptySpace();
+                    }
+                }
+            }
 
             ICommand[] advacedCommands = 
                 { new RepeatCommand(4, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')})};
-            advanced = new Program(advacedCommands.ToList());
 
-            ICommand[] extremeCommands = 
+            advanced = new Program(advacedCommands.ToList(), advancedGrid);
+
+            IGridObject[,] expertGrid = new IGridObject[5, 5];
+            expertGrid[3, 4] = new Player(CardinalDirection.North);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (advancedGrid[i, j] == null)
+                    {
+                        advancedGrid[i , j] = new EmptySpace(); 
+                    }
+                }
+
+            }
+
+            ICommand[] expertCommands = 
                 { new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')}),
                 new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('L')})};
-            expert = new Program(extremeCommands.ToList());
+
+            expert = new Program(expertCommands.ToList(), expertGrid);
+
             Interact();
         }
 
@@ -128,7 +171,7 @@ namespace ScratchMini {
                         //Hier moet nog de repeat command. Maar die is helaas nog niet af.
                 }
             }
-            return new Program(commands);
+            return new Program(commands, new IGridObject[3,3]); //we moeten ff een basisGrid aan maken, t kan ook gwn altijd de basicGrid zijn
         }
 
         public void ExecuteProgram(Program program)
@@ -142,10 +185,12 @@ namespace ScratchMini {
         public string name;
         List <ICommand> Commands;
         Field startingField;
+        public IGridObject[,] Grid;
 
         public Program(List<ICommand> commands, IGridObject [,] grid)
         {
             Commands = commands;
+            Grid = grid;
             startingField = new Field(grid);
 
         }

@@ -51,16 +51,16 @@ namespace Scratch_Mini_Forms
         {
             GridPanel.Controls.Clear();
 
-            int c; //moeten bepaald worden door Program
-            int r; 
+            int size = program.Grid.GetLength(0);
+            
 
 
-            int pWidth = GridPanel.ClientSize.Width / c;
-            int pHeight = GridPanel.ClientSize.Height / r;
+            int pWidth = GridPanel.ClientSize.Width / size;
+            int pHeight = GridPanel.ClientSize.Height / size;
 
-            for (int x = 0; x < r; x++)
+            for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < c; y++)
+                for (int y = 0; y < size; y++)
                 {
                     PictureBox picBox = new PictureBox()
                     {
@@ -77,7 +77,7 @@ namespace Scratch_Mini_Forms
 
         }
 
-        
+
 
         private void OutputTxtBox_TextChanged(object sender, EventArgs e)
         {
@@ -90,6 +90,11 @@ namespace Scratch_Mini_Forms
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void TurnButton_Click(object sender, EventArgs e)
         {
 
         }
