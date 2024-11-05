@@ -102,6 +102,7 @@
             RunProgramButton.TabIndex = 5;
             RunProgramButton.Text = "Run";
             RunProgramButton.UseVisualStyleBackColor = true;
+            RunProgramButton.Click += RunProgramButton_Click;
             // 
             // MetricsButton
             // 
@@ -121,6 +122,7 @@
             menuStrip1.Size = new Size(800, 33);
             menuStrip1.TabIndex = 8;
             menuStrip1.Text = "Choose File";
+            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // chooseProgramToolStripMenuItem
             // 

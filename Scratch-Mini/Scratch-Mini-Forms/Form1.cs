@@ -1,21 +1,19 @@
+using ScratchMini;
+
 namespace Scratch_Mini_Forms
 {
     public partial class Form1 : Form
     {
+        public ICommandLine scratchMini;
         public Form1()
         {
             InitializeComponent();
-
+            scratchMini = new ICommandLine();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             //SetupGrid(5, 5); the default grid
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void chooseProgramToolStripMenuItem_Click(object sender, EventArgs e)
@@ -25,23 +23,37 @@ namespace Scratch_Mini_Forms
 
         private void basicToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetupGrid(3, 3);
+            ShowProgram(scratchMini.basic);
 
         }
 
         private void advancedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetupGrid(4, 4);
+            ShowProgram(scratchMini.advanced);
         }
 
         private void expertToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetupGrid(5, 5);
+            ShowProgram(scratchMini.expert);
         }
 
-        private void SetupGrid(int r, int c)
+        private void ShowProgram(ScratchMini.Program program)
+        {
+
+        }
+
+        private void SetupDialogue(ScratchMini.Program program)
+        {
+
+        }
+
+        private void SetupGrid(ScratchMini.Program program)
         {
             GridPanel.Controls.Clear();
+
+            int c; //moeten bepaald worden door Program
+            int r; 
+
 
             int pWidth = GridPanel.ClientSize.Width / c;
             int pHeight = GridPanel.ClientSize.Height / r;
@@ -65,7 +77,19 @@ namespace Scratch_Mini_Forms
 
         }
 
+        
+
         private void OutputTxtBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RunProgramButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
         }

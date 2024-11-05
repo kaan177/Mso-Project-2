@@ -14,19 +14,21 @@ namespace ScratchMini {
 
     public class ICommandLine
     {
-        Program basicP;
-        Program advanced;
-        Program extreme;
-        Program loaded;
+        public Program basic;
+        public Program advanced;
+        public Program expert;
+        public Program loaded;
 
         public ICommandLine()
         {
-            ICommand[] basicCommands = 
+            ICommand[] basicCommands =
                 { new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R') };
-            basicP = new Program(basicCommands.ToList());
+            IGridObject[,] basisGrid = {
+                {new EmptySpace() }, { new EmptySpace() },  }; 
+            basic = new Program(basicCommands.ToList(), new IGridObject[3,3]);
 
             ICommand[] advacedCommands = 
                 { new RepeatCommand(4, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')})};
@@ -35,7 +37,7 @@ namespace ScratchMini {
             ICommand[] extremeCommands = 
                 { new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')}),
                 new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('L')})};
-            extreme = new Program(extremeCommands.ToList());
+            expert = new Program(extremeCommands.ToList());
             Interact();
         }
 
@@ -53,13 +55,13 @@ namespace ScratchMini {
                     switch (randomNumber)
                     {
                         case 1:
-                            ExecuteProgram(basicP);
+                            ExecuteProgram(basic);
                             break;
                         case 2:
                             ExecuteProgram(advanced);
                             break;
                         case 3:
-                            ExecuteProgram(extreme);
+                            ExecuteProgram(expert);
                             break;
                         case 4:
                             ExecuteProgram(loaded);
@@ -73,13 +75,13 @@ namespace ScratchMini {
                     switch (randomNumber)
                     {
                         case 1:
-                            ExecuteProgram(basicP);
+                            ExecuteProgram(basic);
                             break;
                         case 2:
                             ExecuteProgram(advanced);
                             break;
                         case 3:
-                            ExecuteProgram(extreme);
+                            ExecuteProgram(expert);
                             break;
                     }
                 }
@@ -141,10 +143,10 @@ namespace ScratchMini {
         List <ICommand> Commands;
         Field startingField;
 
-        public Program(List<ICommand> commands)
+        public Program(List<ICommand> commands, IGridObject [,] grid)
         {
             Commands = commands;
-            startingField = new Field();
+            startingField = new Field(grid);
 
         }
 
@@ -187,6 +189,8 @@ namespace ScratchMini {
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() },
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() }};
         }
+
+        
         
         public Field(IGridObject[,] grid)
         {
