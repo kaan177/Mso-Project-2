@@ -165,12 +165,10 @@ namespace ScratchMini {
 
     public class Player : IGridObject
     {
-        public string Image ;
         public CardinalDirection CardinalDirection;
         public override string Name { get { return "Player"; } }
         public Player(CardinalDirection direction)
         {
-            Image = "defaultImage";
             CardinalDirection = direction;
         }
         public (int newX, int newY) PositionInFront(int x, int y)
