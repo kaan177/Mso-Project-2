@@ -162,12 +162,56 @@ namespace ScratchMini {
             Console.WriteLine(program.Execute()); //hier moet nog de keuzen tussen metrics en program output
         }
 
+        public string GetMetricsProgram(Program program)
+        {
+            return $"The number of commands is {program.NumberOfCommands}, the maximum nesting is {program.MaximumNesting}, the amount of repeat commands is {program.NumberOfRepeatCommands}";
+        }
+
     }
     public class Program
     {
         public string name;
         public List <ICommand> Commands;
         public Field field;
+
+        public int NumberOfCommands
+        {
+            get
+            {
+                int numberOfCommands = 0;
+                foreach (ICommand command in Commands)
+                {
+                    numberOfCommands += command.NumberOfCommands;
+                };
+                return numberOfCommands;
+            }
+        }
+
+        public int MaximumNesting
+        {
+            get
+            {
+                int nestingAmount = 0;
+                foreach (ICommand command in Commands)
+                {
+                    nestingAmount = Math.Max(nestingAmount, command.MaximumNesting);
+                }
+                return nestingAmount;
+            }
+        }
+
+        public int NumberOfRepeatCommands
+        {
+            get
+            {
+                int repeatAmount = 0;
+                foreach (ICommand command in Commands)
+                {
+                    repeatAmount += command.NumberOfRepeatCommands;
+                }
+                return repeatAmount;
+            }
+        }
 
         public Program(List<ICommand> commands, Field field)
         {
@@ -313,6 +357,9 @@ namespace ScratchMini {
 
     public abstract class ICommand
     {
+        public abstract int NumberOfCommands {  get; }
+        public abstract int MaximumNesting { get; }
+        public abstract int NumberOfRepeatCommands { get; }
         public abstract string Name { get; }
         public abstract Field executeCommand(Field field);
         public abstract string ToString();
@@ -322,6 +369,42 @@ namespace ScratchMini {
         int times;
         List<ICommand> commands;
         public override string Name { get { return "Repeat command"; } }
+
+        public override int NumberOfCommands
+        {
+            get
+            {
+                int numberOfCommands = 0;
+                foreach (ICommand command in commands)
+                {
+                    numberOfCommands += command.NumberOfCommands;
+                };
+                return numberOfCommands + 1;
+            }
+        }
+
+        public override int MaximumNesting { get 
+            {   
+                int nestingAmount = 0;
+                foreach (ICommand command in commands)
+                {
+                    nestingAmount = Math.Max(nestingAmount, command.MaximumNesting);
+                }
+                return nestingAmount + 1;
+            } }
+
+        public override int NumberOfRepeatCommands
+        {
+            get
+            {
+                int repeatAmount = 0;
+                foreach (ICommand command in commands)
+                {
+                    repeatAmount += command.NumberOfRepeatCommands;
+                }
+                return repeatAmount + 1;
+            }
+        }
 
         public RepeatCommand(int times , List<ICommand> commands)
         {
@@ -357,6 +440,11 @@ namespace ScratchMini {
         char turn; // 'L' to turn left, 'R' to turn right. 
         public override string Name { get { return "Turn command"; } }
 
+        public override int NumberOfCommands { get { return 1; } }
+
+        public override int MaximumNesting { get { return 1; } }
+
+        public override int NumberOfRepeatCommands { get { return 0; } }
         public TurnCommand(char turn)
         {
             this.turn = turn;
@@ -394,14 +482,17 @@ namespace ScratchMini {
     public class MoveCommand : ICommand {
 
         int steps;
+        public override string Name { get { return "Move command"; } }
 
+        public override int NumberOfCommands { get { return 1; } }
+
+        public override int MaximumNesting { get { return 1; } }
+
+        public override int NumberOfRepeatCommands { get { return 0; } }
         public MoveCommand(int steps)
         {
             this.steps = steps;
         }
-
-        public override string Name { get { return "Move command"; } }
-
         public override Field executeCommand(Field field)
         {
             (int playerX, int playerY) = field.GetPlayerPosition();
@@ -446,13 +537,51 @@ namespace ScratchMini {
         List<ICommand> commands;
         IConditional condition;
 
+        
+        public override string Name { get { return "Conditionel command"; } }
+        public override int NumberOfCommands 
+        { 
+            get 
+            {
+                int numberOfCommands = 0;
+                foreach(ICommand command in commands)
+                {
+                    numberOfCommands += command.NumberOfCommands;
+                }; 
+                return numberOfCommands + 1;
+            } 
+        }
+
+        public override int MaximumNesting
+        {
+            get
+            {
+                int nestingAmount = 0;
+                foreach (ICommand command in commands)
+                {
+                    nestingAmount = Math.Max(nestingAmount, command.MaximumNesting);
+                }
+                return nestingAmount + 1;
+            }
+        }
+
+        public override int NumberOfRepeatCommands
+        {
+            get
+            {
+                int repeatAmount = 0;
+                foreach (ICommand command in commands)
+                {
+                    repeatAmount += command.NumberOfRepeatCommands;
+                }
+                return repeatAmount;
+            }
+        }
         public ConditionalCommand(List<ICommand> commands, IConditional condition)
         {
             this.commands = commands;
             this.condition = condition;
         }
-        public override string Name { get { return "Conditionel command"; } }
-
         public override Field executeCommand(Field field)
         {
             while (condition.CheckIfTrue(field))
