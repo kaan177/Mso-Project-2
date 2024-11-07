@@ -167,23 +167,24 @@ namespace ScratchMini {
     {
         public string name;
         public List <ICommand> Commands;
-        Field startingField;
+        public Field field;
 
         public Program(List<ICommand> commands, Field field)
         {
             Commands = commands;
-            startingField = field;
+            this.field = field;
         }
 
         public string Execute()
         {
-            Field currentField = startingField;
+            Field currentField = field;
             string commandLog = "";
             foreach (ICommand command in Commands)
             {
                 currentField = command.executeCommand(currentField);
                 commandLog += command.ToString() + ", ";
             }
+            field = currentField;
             return commandLog;
         }
         
@@ -259,6 +260,20 @@ namespace ScratchMini {
                 }
             }
             return (playerX, playerY);
+        }
+        public void SetPlayerPosition(int playerX, int playerY)
+        {
+            (int oldx, int oldy) = GetPlayerPosition();
+            Player player = GetPlayer();
+            Grid[oldx, oldy] = new EmptySpace();
+            if (Grid[playerX, playerY] is EmptySpace)
+            {
+                Grid[playerX, playerY] = player;
+            }
+            else
+            {
+                throw new Exception("Can't place player on a wall");
+            }
         }
 
         public Player GetPlayer()
