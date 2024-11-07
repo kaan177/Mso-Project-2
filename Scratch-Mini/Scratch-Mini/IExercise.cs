@@ -14,9 +14,30 @@ namespace Scratch_Mini
 
     public class ShapeExercise : IExercise
     {
+        bool[,] shape;
+        (int, int) StartingPosition;
+
+        public ShapeExercise(bool[,] shape)
+        {
+            this.shape = shape;
+        }
+
         public override bool CheckIfProgramSuceeded(ScratchMini.Program program)
         {
-            throw new NotImplementedException();
+            program.field.SetPlayerPosition(StartingPosition.Item1, StartingPosition.Item2);
+            bool[,] attemptedShape;
+            program.Execute(out attemptedShape);
+            bool returnValue = true;
+            for (int i = 0;  i < shape.GetLength(0); i++)
+            {
+                for (int j = 0; j < shape.GetLength(1); j++)
+                {
+                    if (shape[i, j])
+                    {
+                        returnValue = returnValue && attemptedShape[i,j];
+                    }
+                }
+            }return returnValue;
         }
     }
 
@@ -40,7 +61,7 @@ namespace Scratch_Mini
             field.SetPlayerPosition(StartingPosition.Item1, StartingPosition.Item2);
             field.GetPlayer().CardinalDirection = StartingDirection;
             program.field = field;
-            program.Execute();
+            program.Execute(out _);
             return program.field.GetPlayerPosition() == EndingPosition;
             
         }
