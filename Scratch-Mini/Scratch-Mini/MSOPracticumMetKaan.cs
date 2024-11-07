@@ -186,13 +186,11 @@ namespace ScratchMini {
         public string name;
         public List <ICommand> Commands;
         Field startingField;
-        public IGridObject[,] Grid;
 
         public Program(List<ICommand> commands, IGridObject [,] grid)
         {
             Commands = commands;
             startingField = new Field(grid);
-
         }
 
         public string Execute()
