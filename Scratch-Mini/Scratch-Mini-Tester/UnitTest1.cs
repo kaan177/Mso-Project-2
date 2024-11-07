@@ -67,7 +67,7 @@ namespace Scratch_Mini_Tester
         {
             var commands = new List<ICommand> { new MoveCommand(1) };
             var program = new Program(commands);
-            var result = program.Execute();
+            var result = program.Execute(out _);
             Assert.Equal("Move 1, ", result);
         }
 
@@ -76,7 +76,7 @@ namespace Scratch_Mini_Tester
         {
             var commands = new List<ICommand> { new MoveCommand(1), new TurnCommand('R') };
             var program = new Program(commands);
-            var result = program.Execute();
+            var result = program.Execute(out _);
             Assert.Equal("Move 1, Turn R, ", result);
         }
     }

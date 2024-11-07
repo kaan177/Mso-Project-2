@@ -91,76 +91,11 @@ namespace ScratchMini {
             //Interact();
         }
 
-        public void Interact()
-        {
-            Console.WriteLine("Do you want to play a random program (R) or do you want to import a program (I)");
-            string answer = Console.ReadLine();
-
-            if (answer.ToLower() == "r")
-            {
-                if (loaded != null)
-                {
-                    Random random = new Random();
-                    int randomNumber = random.Next(1, 5);
-                    switch (randomNumber)
-                    {
-                        case 1:
-                            ExecuteProgram(basic);
-                            break;
-                        case 2:
-                            ExecuteProgram(advanced);
-                            break;
-                        case 3:
-                            ExecuteProgram(expert);
-                            break;
-                        case 4:
-                            ExecuteProgram(loaded);
-                            break;
-                    }
-                }
-                else
-                {
-                    Random random = new Random();
-                    int randomNumber = random.Next(1, 4);
-                    switch (randomNumber)
-                    {
-                        case 1:
-                            ExecuteProgram(basic);
-                            break;
-                        case 2:
-                            ExecuteProgram(advanced);
-                            break;
-                        case 3:
-                            ExecuteProgram(expert);
-                            break;
-                    }
-                }
-                
-            }
-            else if (answer.ToLower() == "i")
-            {
-                answer = Console.ReadLine();
-                loaded = importer.Import(answer);
-                if (loaded == null)
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            else
-            {
-                Console.WriteLine(answer + " is not a accepted answer.");
-                
-            }
-            Interact();
-        }
         public void LoadProgram(string filePath)
         {
             throw new NotImplementedException();
         }
-        public void ExecuteProgram(Program program)
-        {
-            Console.WriteLine(program.Execute()); //hier moet nog de keuzen tussen metrics en program output
-        }
+
 
         public string GetMetricsProgram(Program program)
         {
@@ -219,14 +154,24 @@ namespace ScratchMini {
             this.field = field;
         }
 
-        public string Execute()
+        public string Execute(out bool[,] touchedSpaces)
         {
             Field currentField = field;
+            touchedSpaces = new bool[currentField.Grid.GetLength(0), currentField.Grid.GetLength(1)];
+            for (int i = 0; i < touchedSpaces.GetLength(0); i++) 
+            {
+                for (int j = 0; j < touchedSpaces.GetLength(1); j++)
+                {
+                    touchedSpaces[i,j] = false;
+                }
+            }
+            touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             string commandLog = "";
             foreach (ICommand command in Commands)
             {
                 currentField = command.executeCommand(currentField);
                 commandLog += command.ToString() + ", ";
+                touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             }
             field = currentField;
             return commandLog;
