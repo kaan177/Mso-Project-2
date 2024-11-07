@@ -44,7 +44,7 @@ namespace ScratchMini {
             basic = new Program(basicCommands.ToList(), basicGrid);
 
             IGridObject[,] advancedGrid = new IGridObject[4, 4];
-            advancedGrid[4,0] = new Player(CardinalDirection.South);
+            advancedGrid[3,0] = new Player(CardinalDirection.South);
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -67,9 +67,9 @@ namespace ScratchMini {
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    if (advancedGrid[i, j] == null)
+                    if (expertGrid[i, j] == null)
                     {
-                        advancedGrid[i , j] = new EmptySpace(); 
+                        expertGrid[i , j] = new EmptySpace(); 
                     }
                 }
 
@@ -81,7 +81,7 @@ namespace ScratchMini {
 
             expert = new Program(expertCommands.ToList(), expertGrid);
 
-            Interact();
+            //Interact();
         }
 
         public void Interact()
