@@ -1,6 +1,9 @@
+using Scratch_Mini;
 using System;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+
+//TO DO: make move command stop when wall
 
 namespace ScratchMini {
     class MainProgram
@@ -20,8 +23,11 @@ namespace ScratchMini {
         Program extreme;
         Program loaded;
 
+        ProgramImporter importer;
+
         public ICommandLine()
         {
+            importer = new ProgramImporter();
             ICommand[] basicCommands = 
                 { new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
@@ -89,10 +95,10 @@ namespace ScratchMini {
             else if (answer.ToLower() == "i")
             {
                 answer = Console.ReadLine();
-                loaded = Import(answer);
+                loaded = importer.Import(answer);
                 if (loaded == null)
                 {
-                    
+                    throw new NotImplementedException();
                 }
             }
             else
@@ -102,34 +108,10 @@ namespace ScratchMini {
             }
             Interact();
         }
-
-        public Program Import(string input)
+        public void LoadProgram(string filePath)
         {
-            string[] inputSplit = input.Split(", ");
-            List<ICommand> commands = new List<ICommand>();
-            foreach (string commandString in inputSplit)
-            {
-                string[] commandStringSplit = commandString.Split(" ");
-                switch (commandStringSplit[0])
-                {
-                    case "Move":
-                        try
-                        {
-                            commands.Add(new MoveCommand(int.Parse(commandStringSplit[1])));
-                        }
-                        catch { Console.WriteLine(commandString + "is not in a valid format "); return null; }
-                        break;
-                    case "Turn":
-                        if(commandStringSplit[0] == "right") { commands.Add(new TurnCommand('R')); }
-                        else if (commandStringSplit[0] == "left") { commands.Add(new TurnCommand('L')); }
-                        else { Console.WriteLine(commandString + "is not in a valid format "); return null; }
-                        break;
-                        //Hier moet nog de repeat command. Maar die is helaas nog niet af.
-                }
-            }
-            return new Program(commands);
+            throw new NotImplementedException();
         }
-
         public void ExecuteProgram(Program program)
         {
             Console.WriteLine(program.Execute()); //hier moet nog de keuzen tussen metrics en program output
@@ -142,10 +124,10 @@ namespace ScratchMini {
         List <ICommand> Commands;
         Field startingField;
 
-        public Program(List<ICommand> commands)
+        public Program(List<ICommand> commands, Field field)
         {
             Commands = commands;
-            startingField = new Field();
+            startingField = field;
         }
 
         public string Execute()

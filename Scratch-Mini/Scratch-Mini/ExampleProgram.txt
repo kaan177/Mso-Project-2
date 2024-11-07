@@ -1,0 +1,7 @@
+OO+++
++OO++
+++OO+
+++OO+
+++OOX
+COMMANDS
+Move 5, Turn right
