@@ -32,10 +32,9 @@ namespace Scratch_Mini
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    if (shape[i, j])
-                    {
-                        returnValue = returnValue && attemptedShape[i,j];
-                    }
+                    
+                    returnValue = returnValue && !(attemptedShape[i,j] ^ shape[i,j]);
+                    
                 }
             }return returnValue;
         }

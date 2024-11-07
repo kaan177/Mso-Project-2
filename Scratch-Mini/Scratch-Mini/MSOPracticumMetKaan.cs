@@ -91,9 +91,9 @@ namespace ScratchMini {
             //Interact();
         }
 
-        public void LoadProgram(string filePath)
+        public void LoadProgram(string input)
         {
-            throw new NotImplementedException();
+            loaded = importer.Import(input);
         }
 
 
