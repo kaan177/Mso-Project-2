@@ -18,32 +18,77 @@ namespace ScratchMini {
 
     public class ICommandLine
     {
-        Program basicP;
-        Program advanced;
-        Program extreme;
-        Program loaded;
+        public Program basic;
+        public Program advanced;
+        public Program expert;
+        public Program loaded;
 
         ProgramImporter importer;
 
         public ICommandLine()
         {
             importer = new ProgramImporter();
-            ICommand[] basicCommands = 
+
+            IGridObject[,] basicGrid = new IGridObject[3, 3];
+            basicGrid[0, 1] = new Player(CardinalDirection.East);
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (basicGrid[i, j] == null)
+                    {
+                        basicGrid[i, j] = new EmptySpace();
+                    }
+                }
+            }
+
+            ICommand[] basicCommands =
                 { new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R'),
                 new MoveCommand(1), new TurnCommand('R') };
-            basicP = new Program(basicCommands.ToList());
+            
+            basic = new Program(basicCommands.ToList(), new Field(basicGrid));
+
+            IGridObject[,] advancedGrid = new IGridObject[4, 4];
+            advancedGrid[3,0] = new Player(CardinalDirection.South);
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (advancedGrid[i, j] == null)
+                    {
+                        advancedGrid[i, j] = new EmptySpace();
+                    }
+                }
+            }
 
             ICommand[] advacedCommands = 
                 { new RepeatCommand(4, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')})};
-            advanced = new Program(advacedCommands.ToList());
 
-            ICommand[] extremeCommands = 
+            advanced = new Program(advacedCommands.ToList(), new Field(advancedGrid));
+
+            IGridObject[,] expertGrid = new IGridObject[5, 5];
+            expertGrid[3, 4] = new Player(CardinalDirection.North);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (expertGrid[i, j] == null)
+                    {
+                        expertGrid[i , j] = new EmptySpace(); 
+                    }
+                }
+
+            }
+
+            ICommand[] expertCommands = 
                 { new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('R')}),
                 new RepeatCommand(2, new List<ICommand> {new MoveCommand(1), new TurnCommand('L')})};
-            extreme = new Program(extremeCommands.ToList());
-            Interact();
+
+            expert = new Program(expertCommands.ToList(), new Field(expertGrid));
+
+            //Interact();
         }
 
         public void Interact()
@@ -60,13 +105,13 @@ namespace ScratchMini {
                     switch (randomNumber)
                     {
                         case 1:
-                            ExecuteProgram(basicP);
+                            ExecuteProgram(basic);
                             break;
                         case 2:
                             ExecuteProgram(advanced);
                             break;
                         case 3:
-                            ExecuteProgram(extreme);
+                            ExecuteProgram(expert);
                             break;
                         case 4:
                             ExecuteProgram(loaded);
@@ -80,13 +125,13 @@ namespace ScratchMini {
                     switch (randomNumber)
                     {
                         case 1:
-                            ExecuteProgram(basicP);
+                            ExecuteProgram(basic);
                             break;
                         case 2:
                             ExecuteProgram(advanced);
                             break;
                         case 3:
-                            ExecuteProgram(extreme);
+                            ExecuteProgram(expert);
                             break;
                     }
                 }
@@ -121,7 +166,7 @@ namespace ScratchMini {
     public class Program
     {
         public string name;
-        List <ICommand> Commands;
+        public List <ICommand> Commands;
         Field startingField;
 
         public Program(List<ICommand> commands, Field field)
@@ -185,6 +230,8 @@ namespace ScratchMini {
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() },
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() }};
         }
+
+        
         
         public Field(IGridObject[,] grid)
         {
