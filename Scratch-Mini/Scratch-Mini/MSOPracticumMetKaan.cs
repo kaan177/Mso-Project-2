@@ -1,6 +1,7 @@
 using Scratch_Mini;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 
 //TO DO: make move command stop when wall
@@ -32,7 +33,7 @@ namespace ScratchMini {
         {
             importer = new ProgramImporter();
 
-            bool[,] exercise1Grid = new bool[,]
+            bool[,] shapeGrid = new bool[,]
             {
                 {false, true, true, true, false },
                 {false, true, false, false, false },
@@ -41,10 +42,51 @@ namespace ScratchMini {
                 {false, true, true, true , false }
             };
 
-           
+            IGridObject[,] exerciseShapeGrid1 = new IGridObject[5, 5];
+            exerciseShapeGrid1 [0, 4] = new Player(CardinalDirection.East);
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (exerciseShapeGrid1[i, j] == null)
+                    {
+                        exerciseShapeGrid1[i, j] = new EmptySpace();
+                    }
+                }
+            }
+
+            exerciseShape1 = new ShapeExercise(shapeGrid, new Program (new List<ICommand> { }, new Field(exerciseShapeGrid1)));
+
+            IGridObject[,] exercisePathGrid1 = new IGridObject[5, 5];
+            exercisePathGrid1[3, 4] = new Player(CardinalDirection.North);
+            List <(int, int)> coordinates = new List<(int, int)>
+            {
+                (1, 1), (1, 2), (1, 3), (2, 2), (3, 2), (4, 2), (0, 4)
+            };
+            foreach(var coord in coordinates)
+            {
+                int x = coord.Item1;
+                int y = coord.Item2;
+
+                if (exercisePathGrid1[x, y] == null)
+                {
+                    exercisePathGrid1[x, y] = new Wall(); //creating the walls
+                }
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    if (exercisePathGrid1[i, j] == null)
+                    {
+                        exercisePathGrid1[i, j] = new EmptySpace(); //creating the emptyspaces
+                    }
+                }
+            }
+
+            exercisePath1 = new PathFindingExercise((0, 5), new Program(new List<ICommand> { }, new Field(exercisePathGrid1)));
             
-
-
             IGridObject[,] basicGrid = new IGridObject[3, 3];
             basicGrid[0, 1] = new Player(CardinalDirection.East);
             for (int i = 0; i < 3; i++)

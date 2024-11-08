@@ -123,12 +123,12 @@ namespace Scratch_Mini_Forms
 
         private void Exercise1Shape_Click(object sender, EventArgs e)
         {
-
+            ShowProgram(scratchMini.exerciseShape1.exerciseProgram);
         }
 
         private void exercise1PathFinding_Click(object sender, EventArgs e)
         {
-
+            ShowProgram(scratchMini.exercisePath1.exerciseProgram);
         }
     }
 }
