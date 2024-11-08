@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic.ApplicationServices;
 using ScratchMini;
 
 namespace Scratch_Mini_Forms
@@ -9,6 +10,7 @@ namespace Scratch_Mini_Forms
         {
             InitializeComponent();
             scratchMini = new ICommandLine();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace Scratch_Mini_Forms
         private void SetupDialogue(ScratchMini.Program program)
         {
             UserInputTxtBox.Clear();
-            List <ICommand> commands = program.Commands;
+            List<ICommand> commands = program.Commands;
             string commandText = "";
             foreach (ICommand command in commands)
             {
@@ -60,28 +62,76 @@ namespace Scratch_Mini_Forms
         {
             GridPanel.Controls.Clear();
 
-            int size = program.Grid.GetLength(0);
+            Field field = program.field;
+
+            int size = field.Grid.GetLength(0);
 
             int pWidth = GridPanel.ClientSize.Width / size;
             int pHeight = GridPanel.ClientSize.Height / size;
 
             for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < size; y++)
+                for (int y = size - 1; y >= 0; y--)
                 {
-                    PictureBox picBox = new PictureBox()
+                    if (field.Grid[x, y] is Player)
                     {
-                        Width = pWidth,
-                        Height = pHeight,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Location = new Point(y * pWidth, x * pHeight),
-                        BackColor = Color.Yellow
-                    };
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
+                            BackColor = Color.Yellow,
+                            Image = Image.FromFile(@"..\\..\\Assets\\guy.png"),
+                            SizeMode = PictureBoxSizeMode.StretchImage
+                            //rotateFlip()
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
+                    else if (field.Grid[x, y] is Wall)
+                    {
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
+                            BackColor = Color.Yellow,
+                            Image = Image.FromFile(@"..\\..\\Assets\\Designer.png"),
+                            SizeMode = PictureBoxSizeMode.StretchImage
+                            //rotateFlip()
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
+                    else if (field.Grid[x, y] is EmptySpace)
+                    {
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(x * pWidth, y * pHeight),
+                            BackColor = Color.Yellow
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
 
-                    GridPanel.Controls.Add(picBox);
+
                 }
             }
-
+            /*PictureBox pictureBox = new PictureBox()
+            {
+                Width = pWidth,
+                Height = pHeight,
+                BorderStyle = BorderStyle.FixedSingle,
+                Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
+                BackColor = Color.Yellow,
+                Image = Image.FromFile("C:\\Users\\knpg2\\Documents\\GitHub\\Kario\\Mso-Scratch-Mini\\Mso-Project-2\\Scratch-Mini\\Scratch-Mini-Forms\\Assets\\guy.png"),
+                
+                //rotateFlip()
+            };
+            GridPanel.Controls.Add(pictureBox);
+            pictureBox.BringToFront();*/
         }
 
 

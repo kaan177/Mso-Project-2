@@ -31,6 +31,7 @@ namespace ScratchMini {
 
             IGridObject[,] basicGrid = new IGridObject[3, 3];
             basicGrid[0, 1] = new Player(CardinalDirection.East);
+            basicGrid[1, 2] = new Wall();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -41,6 +42,7 @@ namespace ScratchMini {
                     }
                 }
             }
+
 
             ICommand[] basicCommands =
                 { new MoveCommand(1), new TurnCommand('R'),
@@ -242,12 +244,13 @@ namespace ScratchMini {
                         playerY = y; //current y coordinate of the player object
                         break;
                     }
-                }
-                if (playerX != -1 && playerY != -1)
-                {
-                    throw new Exception("Player not found in grid"); // to stop the initial loop
-                }
+                } 
             }
+            if (playerX == -1 || playerY == -1)
+            {
+                throw new Exception("Player not found in grid"); // to stop the initial loop
+            }
+            
             return (playerX, playerY);
         }
         public void SetPlayerPosition(int playerX, int playerY)

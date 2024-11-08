@@ -59,5 +59,14 @@ namespace Scratch_Mini_Forms.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to guy.png.
+        /// </summary>
+        internal static string guy {
+            get {
+                return ResourceManager.GetString("guy", resourceCulture);
+            }
+        }
     }
 }
