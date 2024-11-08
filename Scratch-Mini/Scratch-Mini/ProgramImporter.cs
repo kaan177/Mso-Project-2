@@ -17,9 +17,8 @@ namespace Scratch_Mini
             string[] inputSplit = input.Split("COMMANDS");
 
             IGridObject[,] grid = GridImporter(inputSplit[0]);
-            string[] commandInput = inputSplit[1].Split(", ");
-            Stack<string> commandStack = new Stack<string>(commandInput.Reverse());
-            List<ICommand> commands = ImportCommands(ref commandStack);
+
+            List<ICommand> commands = StringToCommands(inputSplit[1]);
 
             return new ScratchMini.Program(commands, new Field(grid));
         }
@@ -53,6 +52,12 @@ namespace Scratch_Mini
             return grid;
         }
         
+        public List<ICommand> StringToCommands(string input)
+        {
+            string[] commandInput = input.Split(",");
+            Stack<string> commandStack = new Stack<string>(commandInput.Reverse());
+            return ImportCommands(ref commandStack);
+        }
         private List<ICommand> ImportCommands(ref Stack<string> strings)
         {
             List<ICommand> commands = new List<ICommand>();

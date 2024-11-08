@@ -28,7 +28,7 @@ namespace Scratch_Mini
         {
           
             bool[,] attemptedShape;
-            program.Execute(out attemptedShape);
+            program.Execute(out attemptedShape ,out _);
             bool returnValue = true;
             for (int i = 0;  i < shape.GetLength(0); i++)
             {
@@ -60,7 +60,7 @@ namespace Scratch_Mini
         public override bool CheckIfProgramSuceeded(ScratchMini.Program program)
         {
             
-            program.Execute(out _);
+            program.Execute(out _, out _);
             return program.field.GetPlayerPosition() == EndingPosition;
             
         }

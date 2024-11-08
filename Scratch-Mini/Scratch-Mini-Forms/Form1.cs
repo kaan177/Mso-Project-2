@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic.ApplicationServices;
+using Scratch_Mini_Forms.Properties;
 using Scratch_Mini;
 using ScratchMini;
 
@@ -6,10 +8,12 @@ namespace Scratch_Mini_Forms
     public partial class Form1 : Form
     {
         public ICommandLine scratchMini;
+        public ScratchMini.Program activeProgram;
         public Form1()
         {
             InitializeComponent();
             scratchMini = new ICommandLine();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -25,23 +29,25 @@ namespace Scratch_Mini_Forms
         private void basicToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.basic);
-
+            activeProgram = scratchMini.basic;
         }
 
         private void advancedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.advanced);
+            activeProgram = scratchMini.advanced;
         }
 
         private void expertToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.expert);
+            activeProgram = scratchMini.expert;
         }
 
         private void ShowProgram(ScratchMini.Program program)
         {
             SetupDialogue(program);
-            SetupGrid(program);
+            SetupGrid(program.field);
         }
 
         private void SetupDialogue(ScratchMini.Program program)
@@ -51,41 +57,90 @@ namespace Scratch_Mini_Forms
             string commandText = "";
             foreach (ICommand command in commands)
             {
-                commandText += command.ToString() + "\n";
+                commandText += command.ToString();
             }
 
             UserInputTxtBox.Text = commandText.TrimEnd();
         }
 
-        private void SetupGrid(ScratchMini.Program program)
+        private void SetupGrid(Field field)
         {
             GridPanel.Controls.Clear();
 
-            int size = program.field.Grid.GetLength(0); //checken of dit klopt
+            int size = field.Grid.GetLength(0);
 
             int pWidth = GridPanel.ClientSize.Width / size;
             int pHeight = GridPanel.ClientSize.Height / size;
 
             for (int x = 0; x < size; x++)
             {
-                for (int y = 0; y < size; y++)
+                for (int y = size - 1; y >= 0; y--)
                 {
-                    PictureBox picBox = new PictureBox()
+                    if (field.Grid[x, y] is Player)
                     {
-                        Width = pWidth,
-                        Height = pHeight,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Location = new Point(y * pWidth, x * pHeight),
-                        BackColor = Color.Yellow
-                    };
+                        Image image = Resources.guy1;
+                        image.RotateFlip(DetermineRotation(field.GetPlayer().CardinalDirection));
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(x * pWidth, y * pHeight),
+                            BackColor = Color.Yellow,
+                            Image = image,
+                            SizeMode = PictureBoxSizeMode.StretchImage
+                            //rotateFlip()
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
+                    else if (field.Grid[x, y] is Wall)
+                    {
 
-                    GridPanel.Controls.Add(picBox);
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(x * pWidth, y * pHeight),
+                            BackColor = Color.Yellow,
+                            Image = Resources.Designer,
+                            SizeMode = PictureBoxSizeMode.StretchImage
+                            //rotateFlip()
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
+                    else if (field.Grid[x, y] is EmptySpace)
+                    {
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(x * pWidth, y * pHeight),
+                            BackColor = Color.Yellow
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
                 }
             }
 
         }
 
-
+        private RotateFlipType DetermineRotation(CardinalDirection direction)
+        {
+            switch (direction)
+            {
+                case CardinalDirection.North:
+                    return RotateFlipType.Rotate270FlipNone;
+                case CardinalDirection.South:
+                    return RotateFlipType.Rotate90FlipNone;
+                case CardinalDirection.East:
+                    return RotateFlipType.RotateNoneFlipNone;
+                case CardinalDirection.West:
+                    return RotateFlipType.Rotate180FlipNone;
+            }
+            return RotateFlipType.RotateNoneFlipNone;
+        }
 
         private void OutputTxtBox_TextChanged(object sender, EventArgs e)
         {
@@ -94,7 +149,21 @@ namespace Scratch_Mini_Forms
 
         private void RunProgramButton_Click(object sender, EventArgs e)
         {
+            if (activeProgram != null)
+            {
+                Field field;
+                try
+                {
+                    activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                    textBox1.Text = activeProgram.Execute(out _, out field);
+                    SetupGrid(field);
+                }
+                catch (Exception ex)
+                {
+                    textBox1.Text = ex.Message;
+                }
 
+            }
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -103,6 +172,21 @@ namespace Scratch_Mini_Forms
         }
 
         private void TurnButton_Click(object sender, EventArgs e)
+        {
+            try {
+                activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                if (activeProgram != null)
+                {
+                    ShowProgram(activeProgram);
+                }
+            }
+            catch (Exception ex)
+            {
+                textBox1.Text = ex.Message;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }
@@ -157,6 +241,22 @@ namespace Scratch_Mini_Forms
                 {
                     MessageBox.Show("Error reading file: " + ex.Message);
                 }
+            }
+        }
+
+        private void MetricsButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                if (activeProgram != null)
+                {
+                    textBox1.Text = scratchMini.GetMetricsProgram(activeProgram);
+                }
+            }
+            catch (Exception ex)
+            {
+                textBox1.Text = ex.Message;
             }
         }
     }
