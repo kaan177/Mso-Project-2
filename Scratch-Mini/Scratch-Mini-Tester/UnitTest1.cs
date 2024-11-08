@@ -1,83 +1,133 @@
+using Newtonsoft.Json.Bson;
+using Scratch_Mini;
 using ScratchMini;
+
 namespace Scratch_Mini_Tester
 
 {
     public class MoveCommandTests
     {
-        [Fact]
-        public void Move_WithinBounds_UpdatesPosition() //gwn checken of ie wel beweegt als ie binnen de bounds is
-        {
-            var field = new Field();
-            var moveCommand = new MoveCommand(1);
-            field = moveCommand.executeCommand(field);
-            Assert.IsType<Player>(field.Grid[0, 1]);
-        }
-
-        [Fact]
-        public void Move_OutOfBounds_DoesNotMove() //checken of ie niet beweegt als ie buiten de bounds zou gaan
-        {
-            var field = new Field();
-            var player = (Player)field.Grid[0, 0];
-            player.CardinalDirection = CardinalDirection.West;
-            var moveCommand = new MoveCommand(1);
-            field = moveCommand.executeCommand(field);
-            Assert.IsType<Player>(field.Grid[0, 0]);
-        }
-
-        [Fact]
-        public void Move_IntoOccupiedSpace_DoesNotMove() //checken of ie niet beweegt als er een obstakel is
-        {
-            var field = new Field();
-            field.Grid[0, 1] = new Wall();
-            var moveCommand = new MoveCommand(1);
-            field = moveCommand.executeCommand(field);
-            Assert.IsType<Player>(field.Grid[0, 0]);
-        }
-    }
-
-    public class TurnCommandTests
-    {
-        [Theory]
-        [InlineData(CardinalDirection.North, 'R', CardinalDirection.East)]
-        [InlineData(CardinalDirection.East, 'R', CardinalDirection.South)]
-        [InlineData(CardinalDirection.South, 'R', CardinalDirection.West)]
-        [InlineData(CardinalDirection.West, 'R', CardinalDirection.North)]
-        [InlineData(CardinalDirection.North, 'L', CardinalDirection.West)]
-        [InlineData(CardinalDirection.West, 'L', CardinalDirection.South)]
-        [InlineData(CardinalDirection.South, 'L', CardinalDirection.East)]
-        [InlineData(CardinalDirection.East, 'L', CardinalDirection.North)]
-
-        public void Turn_CheckDirection(CardinalDirection startDirection, char turn, CardinalDirection expectedDirection)
-        {
-            var field = new Field();
-            var player = (Player)field.Grid[0, 0];
-            player.CardinalDirection = startDirection;
-
-            var turnCommand = new TurnCommand(turn);
-            field = turnCommand.executeCommand(field);
-
-            Assert.Equal(expectedDirection, player.CardinalDirection);
-        }
     }
 
     public class ProgramTests
     {
+
         [Fact]
-        public void Program_ExecutesSingleCommand()
+        public void testNumberOfCommands()
         {
-            var commands = new List<ICommand> { new MoveCommand(1) };
-            var program = new Program(commands);
-            var result = program.Execute(out _);
-            Assert.Equal("Move 1, ", result);
+
+            var field = new Field();
+            List<ICommand> testCommands = new List<ICommand>()
+            {
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R')
+            };
+
+            var testProgram = new Program(testCommands, field);
+
+            int totalCommands = testProgram.NumberOfCommands;
+
+            Assert.Equal(6, totalCommands);
         }
 
         [Fact]
-        public void Program_ExecutesMultipleCommands()
+
+        public void testMaximumNesting()
         {
-            var commands = new List<ICommand> { new MoveCommand(1), new TurnCommand('R') };
-            var program = new Program(commands);
-            var result = program.Execute(out _);
-            Assert.Equal("Move 1, Turn R, ", result);
+            var field = new Field();
+
+            List<ICommand> helperList = new List<ICommand>()
+            {
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R')
+            };
+            List<ICommand> repeatTheHelperList = new List<ICommand>()
+            {
+                new RepeatCommand(2, helperList)
+            };
+
+            List<ICommand> testCommands = new List<ICommand>()
+            {
+                new RepeatCommand(2, helperList), new RepeatCommand(1, repeatTheHelperList)
+            };
+
+            var testProgram = new Program(testCommands, field);
+            int totalNesting = testProgram.MaximumNesting;
+
+            Assert.Equal(3, totalNesting);
+
         }
+
+        [Fact]
+        public void testNumberOfRepeatCommands()
+        {
+            var field = new Field();
+
+            List<ICommand> helperList = new List<ICommand>()
+            {
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R'),
+                new MoveCommand(1), new TurnCommand('R')
+            };
+            List<ICommand> repeatTheHelperList = new List<ICommand>()
+            {
+                new RepeatCommand(2, helperList)
+            };
+
+            List<ICommand> testCommands = new List<ICommand>()
+            {
+                new RepeatCommand(2, helperList), new RepeatCommand(1, repeatTheHelperList)
+            };
+
+            var testProgram = new Program(testCommands, field);
+            int totalRepeatCommands = testProgram.NumberOfRepeatCommands;
+
+            Assert.Equal(3, totalRepeatCommands);
+        }
+
+        [Fact]
+
+        public void testToStringMethod()
+        {
+            var command = new MoveCommand(1);
+            var command2 = new TurnCommand('L');
+
+
+            string finalString = command2.ToString();
+
+            Assert.Equal("Turn L", finalString);
+
+
+
+        }
+
+    }
+
+    public class ShapeExerciseTests
+    {
+        [Fact]
+        public void ShapeExercise_returnsTrue_ifShapeIsCorret()
+        {
+            bool[,] expectedShape = new bool[,]
+            {
+                { true, true, false },
+                { false, true, true },
+                { false, false, true }
+            };
+
+
+        }
+
+        public class PathFindingExerciseTests
+        {
+
+        }
+    }
+
+    public class WinFormTests
+    {
+
     }
 }

@@ -36,6 +36,11 @@
             basicToolStripMenuItem = new ToolStripMenuItem();
             advancedToolStripMenuItem = new ToolStripMenuItem();
             expertToolStripMenuItem = new ToolStripMenuItem();
+            OpenFileToolStripMenuItem = new ToolStripMenuItem();
+            choosePathExerciseToolStrip = new ToolStripMenuItem();
+            exercise1PathFinding = new ToolStripMenuItem();
+            chooseShapeExerciseToolStrip = new ToolStripMenuItem();
+            Exercise1Shape = new ToolStripMenuItem();
             GridPanel = new Panel();
             UserInputTxtBox = new TextBox();
             textBox1 = new TextBox();
@@ -76,7 +81,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(24, 24);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { chooseProgramToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { chooseProgramToolStripMenuItem, choosePathExerciseToolStrip, chooseShapeExerciseToolStrip });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 33);
@@ -86,7 +91,7 @@
             // 
             // chooseProgramToolStripMenuItem
             // 
-            chooseProgramToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { basicToolStripMenuItem, advancedToolStripMenuItem, expertToolStripMenuItem });
+            chooseProgramToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { basicToolStripMenuItem, advancedToolStripMenuItem, expertToolStripMenuItem, OpenFileToolStripMenuItem });
             chooseProgramToolStripMenuItem.Name = "chooseProgramToolStripMenuItem";
             chooseProgramToolStripMenuItem.Size = new Size(162, 29);
             chooseProgramToolStripMenuItem.Text = "Choose Program";
@@ -95,23 +100,60 @@
             // basicToolStripMenuItem
             // 
             basicToolStripMenuItem.Name = "basicToolStripMenuItem";
-            basicToolStripMenuItem.Size = new Size(193, 34);
+            basicToolStripMenuItem.Size = new Size(180, 22);
             basicToolStripMenuItem.Text = "Basic";
             basicToolStripMenuItem.Click += basicToolStripMenuItem_Click;
             // 
             // advancedToolStripMenuItem
             // 
             advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            advancedToolStripMenuItem.Size = new Size(193, 34);
+            advancedToolStripMenuItem.Size = new Size(180, 22);
             advancedToolStripMenuItem.Text = "Advanced";
             advancedToolStripMenuItem.Click += advancedToolStripMenuItem_Click;
             // 
             // expertToolStripMenuItem
             // 
             expertToolStripMenuItem.Name = "expertToolStripMenuItem";
-            expertToolStripMenuItem.Size = new Size(193, 34);
+            expertToolStripMenuItem.Size = new Size(180, 22);
             expertToolStripMenuItem.Text = "Expert";
             expertToolStripMenuItem.Click += expertToolStripMenuItem_Click;
+            // 
+            // OpenFileToolStripMenuItem
+            // 
+            OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem";
+            OpenFileToolStripMenuItem.Size = new Size(180, 22);
+            OpenFileToolStripMenuItem.Text = "Open File";
+            OpenFileToolStripMenuItem.Click += OpenFileToolStripMenuItem_Click;
+            // 
+            // choosePathExerciseToolStrip
+            // 
+            choosePathExerciseToolStrip.DropDownItems.AddRange(new ToolStripItem[] { exercise1PathFinding });
+            choosePathExerciseToolStrip.Name = "choosePathExerciseToolStrip";
+            choosePathExerciseToolStrip.Size = new Size(131, 22);
+            choosePathExerciseToolStrip.Text = "Choose Path exercise";
+            choosePathExerciseToolStrip.Click += choosePathExerciseToolStrip_Click;
+            // 
+            // exercise1PathFinding
+            // 
+            exercise1PathFinding.Name = "exercise1PathFinding";
+            exercise1PathFinding.Size = new Size(125, 22);
+            exercise1PathFinding.Text = "Exercise 1";
+            exercise1PathFinding.Click += exercise1PathFinding_Click;
+            // 
+            // chooseShapeExerciseToolStrip
+            // 
+            chooseShapeExerciseToolStrip.DropDownItems.AddRange(new ToolStripItem[] { Exercise1Shape });
+            chooseShapeExerciseToolStrip.Name = "chooseShapeExerciseToolStrip";
+            chooseShapeExerciseToolStrip.Size = new Size(139, 22);
+            chooseShapeExerciseToolStrip.Text = "Choose Shape exercise";
+            chooseShapeExerciseToolStrip.Click += chooseShapeExerciseToolStrip_Click;
+            // 
+            // Exercise1Shape
+            // 
+            Exercise1Shape.Name = "Exercise1Shape";
+            Exercise1Shape.Size = new Size(125, 22);
+            Exercise1Shape.Text = "Exercise 1";
+            Exercise1Shape.Click += Exercise1Shape_Click;
             // 
             // GridPanel
             // 
@@ -161,6 +203,7 @@
             Controls.Add(OutputTxtBox);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             menuStrip1.ResumeLayout(false);
@@ -180,6 +223,11 @@
         private ToolStripMenuItem expertToolStripMenuItem;
         private Panel GridPanel;
         private TextBox UserInputTxtBox;
+        private ToolStripMenuItem choosePathExerciseToolStrip;
+        private ToolStripMenuItem exercise1PathFinding;
+        private ToolStripMenuItem chooseShapeExerciseToolStrip;
+        private ToolStripMenuItem Exercise1Shape;
+        private ToolStripMenuItem OpenFileToolStripMenuItem;
         private TextBox textBox1;
         private Button button1;
     }
