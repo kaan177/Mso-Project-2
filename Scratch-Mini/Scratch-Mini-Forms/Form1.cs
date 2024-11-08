@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic.ApplicationServices;
+using Scratch_Mini_Forms.Properties;
 using ScratchMini;
 
 namespace Scratch_Mini_Forms
@@ -80,9 +81,9 @@ namespace Scratch_Mini_Forms
                             Width = pWidth,
                             Height = pHeight,
                             BorderStyle = BorderStyle.FixedSingle,
-                            Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
+                            Location = new Point(x * pWidth, y * pHeight),
                             BackColor = Color.Yellow,
-                            Image = Image.FromFile(@"..\\..\\Assets\\guy.png"),
+                            Image = Resources.guy1,
                             SizeMode = PictureBoxSizeMode.StretchImage
                             //rotateFlip()
                         };
@@ -95,9 +96,9 @@ namespace Scratch_Mini_Forms
                             Width = pWidth,
                             Height = pHeight,
                             BorderStyle = BorderStyle.FixedSingle,
-                            Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
+                            Location = new Point(x * pWidth, y * pHeight),
                             BackColor = Color.Yellow,
-                            Image = Image.FromFile(@"..\\..\\Assets\\Designer.png"),
+                            Image = Resources.Designer,
                             SizeMode = PictureBoxSizeMode.StretchImage
                             //rotateFlip()
                         };
@@ -115,8 +116,6 @@ namespace Scratch_Mini_Forms
                         };
                         GridPanel.Controls.Add(picBox);
                     }
-
-
                 }
             }
             /*PictureBox pictureBox = new PictureBox()

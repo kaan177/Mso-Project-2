@@ -16,6 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="bin\Assets\Designer.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Assets\guy.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Scratch-Mini\Scratch-Mini.csproj" />
   </ItemGroup>
 
@@ -32,6 +40,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
