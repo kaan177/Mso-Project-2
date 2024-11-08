@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TurnButton = new Button();
-            MoveButton = new Button();
-            RepeatButton = new Button();
-            RepeatUntilButton = new Button();
             OutputTxtBox = new TextBox();
             RunProgramButton = new Button();
             MetricsButton = new Button();
@@ -47,70 +43,26 @@
             Exercise1Shape = new ToolStripMenuItem();
             GridPanel = new Panel();
             UserInputTxtBox = new TextBox();
+            textBox1 = new TextBox();
+            button1 = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // TurnButton
-            // 
-            TurnButton.BackColor = Color.FromArgb(224, 224, 224);
-            TurnButton.ForeColor = SystemColors.ActiveCaptionText;
-            TurnButton.Location = new Point(220, 26);
-            TurnButton.Margin = new Padding(2);
-            TurnButton.Name = "TurnButton";
-            TurnButton.Size = new Size(78, 35);
-            TurnButton.TabIndex = 0;
-            TurnButton.Text = "Turn";
-            TurnButton.UseVisualStyleBackColor = false;
-            TurnButton.Click += TurnButton_Click;
-            // 
-            // MoveButton
-            // 
-            MoveButton.Location = new Point(303, 26);
-            MoveButton.Margin = new Padding(2);
-            MoveButton.Name = "MoveButton";
-            MoveButton.Size = new Size(78, 35);
-            MoveButton.TabIndex = 1;
-            MoveButton.Text = "Move";
-            MoveButton.UseVisualStyleBackColor = true;
-            // 
-            // RepeatButton
-            // 
-            RepeatButton.Location = new Point(138, 26);
-            RepeatButton.Margin = new Padding(2);
-            RepeatButton.Name = "RepeatButton";
-            RepeatButton.RightToLeft = RightToLeft.No;
-            RepeatButton.Size = new Size(78, 35);
-            RepeatButton.TabIndex = 2;
-            RepeatButton.Text = "Repeat";
-            RepeatButton.UseVisualStyleBackColor = true;
-            // 
-            // RepeatUntilButton
-            // 
-            RepeatUntilButton.Location = new Point(386, 26);
-            RepeatUntilButton.Margin = new Padding(2);
-            RepeatUntilButton.Name = "RepeatUntilButton";
-            RepeatUntilButton.Size = new Size(78, 35);
-            RepeatUntilButton.TabIndex = 3;
-            RepeatUntilButton.Text = "RepeatUntil";
-            RepeatUntilButton.UseVisualStyleBackColor = true;
-            // 
             // OutputTxtBox
             // 
-            OutputTxtBox.Location = new Point(141, 250);
-            OutputTxtBox.Margin = new Padding(2);
+            OutputTxtBox.Location = new Point(201, 417);
             OutputTxtBox.Multiline = true;
             OutputTxtBox.Name = "OutputTxtBox";
             OutputTxtBox.ReadOnly = true;
-            OutputTxtBox.Size = new Size(241, 62);
+            OutputTxtBox.Size = new Size(343, 101);
             OutputTxtBox.TabIndex = 4;
             OutputTxtBox.TextChanged += OutputTxtBox_TextChanged;
             // 
             // RunProgramButton
             // 
-            RunProgramButton.Location = new Point(141, 198);
-            RunProgramButton.Margin = new Padding(2);
+            RunProgramButton.Location = new Point(201, 330);
             RunProgramButton.Name = "RunProgramButton";
-            RunProgramButton.Size = new Size(78, 40);
+            RunProgramButton.Size = new Size(111, 67);
             RunProgramButton.TabIndex = 5;
             RunProgramButton.Text = "Run";
             RunProgramButton.UseVisualStyleBackColor = true;
@@ -118,13 +70,13 @@
             // 
             // MetricsButton
             // 
-            MetricsButton.Location = new Point(303, 198);
-            MetricsButton.Margin = new Padding(2);
+            MetricsButton.Location = new Point(433, 330);
             MetricsButton.Name = "MetricsButton";
-            MetricsButton.Size = new Size(78, 40);
+            MetricsButton.Size = new Size(111, 67);
             MetricsButton.TabIndex = 6;
             MetricsButton.Text = "Metrics";
             MetricsButton.UseVisualStyleBackColor = true;
+            MetricsButton.Click += MetricsButton_Click;
             // 
             // menuStrip1
             // 
@@ -132,8 +84,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { chooseProgramToolStripMenuItem, choosePathExerciseToolStrip, chooseShapeExerciseToolStrip });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(4, 1, 0, 1);
-            menuStrip1.Size = new Size(560, 24);
+            menuStrip1.Size = new Size(800, 33);
             menuStrip1.TabIndex = 8;
             menuStrip1.Text = "Choose File";
             menuStrip1.ItemClicked += menuStrip1_ItemClicked;
@@ -142,7 +93,7 @@
             // 
             chooseProgramToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { basicToolStripMenuItem, advancedToolStripMenuItem, expertToolStripMenuItem, OpenFileToolStripMenuItem });
             chooseProgramToolStripMenuItem.Name = "chooseProgramToolStripMenuItem";
-            chooseProgramToolStripMenuItem.Size = new Size(108, 22);
+            chooseProgramToolStripMenuItem.Size = new Size(162, 29);
             chooseProgramToolStripMenuItem.Text = "Choose Program";
             chooseProgramToolStripMenuItem.Click += chooseProgramToolStripMenuItem_Click;
             // 
@@ -207,35 +158,49 @@
             // GridPanel
             // 
             GridPanel.BackColor = SystemColors.Info;
-            GridPanel.Location = new Point(386, 66);
-            GridPanel.Margin = new Padding(2);
+            GridPanel.Location = new Point(551, 108);
             GridPanel.Name = "GridPanel";
-            GridPanel.Size = new Size(159, 127);
+            GridPanel.Size = new Size(227, 214);
             GridPanel.TabIndex = 9;
             // 
             // UserInputTxtBox
             // 
-            UserInputTxtBox.Location = new Point(141, 65);
-            UserInputTxtBox.Margin = new Padding(2);
+            UserInputTxtBox.Location = new Point(201, 108);
             UserInputTxtBox.Multiline = true;
             UserInputTxtBox.Name = "UserInputTxtBox";
-            UserInputTxtBox.Size = new Size(241, 129);
+            UserInputTxtBox.Size = new Size(343, 212);
             UserInputTxtBox.TabIndex = 10;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(551, 330);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(227, 88);
+            textBox1.TabIndex = 11;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(202, 42);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 12;
+            button1.Text = "Reset";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(560, 317);
+            ClientSize = new Size(800, 528);
+            Controls.Add(button1);
+            Controls.Add(textBox1);
             Controls.Add(UserInputTxtBox);
             Controls.Add(GridPanel);
             Controls.Add(MetricsButton);
             Controls.Add(RunProgramButton);
             Controls.Add(OutputTxtBox);
-            Controls.Add(RepeatUntilButton);
-            Controls.Add(RepeatButton);
-            Controls.Add(MoveButton);
-            Controls.Add(TurnButton);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Margin = new Padding(2);
@@ -248,11 +213,6 @@
         }
 
         #endregion
-
-        private Button TurnButton;
-        private Button MoveButton;
-        private Button RepeatButton;
-        private Button RepeatUntilButton;
         private TextBox OutputTxtBox;
         private Button RunProgramButton;
         private Button MetricsButton;
@@ -268,5 +228,7 @@
         private ToolStripMenuItem chooseShapeExerciseToolStrip;
         private ToolStripMenuItem Exercise1Shape;
         private ToolStripMenuItem OpenFileToolStripMenuItem;
+        private TextBox textBox1;
+        private Button button1;
     }
 }

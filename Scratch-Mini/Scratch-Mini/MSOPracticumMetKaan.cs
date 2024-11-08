@@ -88,7 +88,8 @@ namespace ScratchMini {
             exercisePath1 = new PathFindingExercise((0, 5), new Program(new List<ICommand> { }, new Field(exercisePathGrid1)));
             
             IGridObject[,] basicGrid = new IGridObject[3, 3];
-            basicGrid[0, 1] = new Player(CardinalDirection.East);
+            basicGrid[0, 1] = new Player(CardinalDirection.West);
+            basicGrid[1, 2] = new Wall();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -99,6 +100,7 @@ namespace ScratchMini {
                     }
                 }
             }
+
 
             ICommand[] basicCommands =
                 { new MoveCommand(1), new TurnCommand('R'),
@@ -154,6 +156,11 @@ namespace ScratchMini {
             loaded = importer.Import(input);
         }
 
+        public List<ICommand> LoadCommands(string input)
+        {
+            return importer.StringToCommands(input);
+        }
+
 
         public string GetMetricsProgram(Program program)
         {
@@ -166,6 +173,7 @@ namespace ScratchMini {
         public string name;
         public List <ICommand> Commands;
         public Field field;
+        Field startingField;
 
         public int NumberOfCommands
         {
@@ -210,9 +218,10 @@ namespace ScratchMini {
         {
             Commands = commands;
             this.field = field;
+            startingField = field;
         }
 
-        public string Execute(out bool[,] touchedSpaces)
+        public string Execute(out bool[,] touchedSpaces, out Field outputField)
         {
             Field currentField = field;
             touchedSpaces = new bool[currentField.Grid.GetLength(0), currentField.Grid.GetLength(1)];
@@ -228,10 +237,10 @@ namespace ScratchMini {
             foreach (ICommand command in Commands)
             {
                 currentField = command.executeCommand(currentField);
-                commandLog += command.ToString() + ", ";
                 touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             }
-            field = currentField;
+            outputField = currentField;
+            field = startingField;
             return commandLog;
         }
         
@@ -251,13 +260,13 @@ namespace ScratchMini {
             switch (CardinalDirection)
             {
                 case CardinalDirection.North:
-                    return (x - 1, y);
+                    return (x , y - 1);
                 case CardinalDirection.East:
-                    return (x, y + 1);
-                case CardinalDirection.South:
                     return (x + 1, y);
+                case CardinalDirection.South:
+                    return (x, y + 1);
                 case CardinalDirection.West:
-                    return (x, y - 1);
+                    return (x - 1, y);
                 default:
                     return (x, y);
             }
@@ -300,12 +309,13 @@ namespace ScratchMini {
                         playerY = y; //current y coordinate of the player object
                         break;
                     }
-                }
-                if (playerX != -1 && playerY != -1)
-                {
-                    throw new Exception("Player not found in grid"); // to stop the initial loop
-                }
+                } 
             }
+            if (playerX == -1 || playerY == -1)
+            {
+                throw new Exception("Player not found in grid"); // to stop the initial loop
+            }
+            
             return (playerX, playerY);
         }
         public void SetPlayerPosition(int playerX, int playerY)
@@ -435,7 +445,7 @@ namespace ScratchMini {
                 childrenStrings += command.ToString();
             }
 
-            return "Repeat " + times.ToString() + "(" + childrenStrings + ")";
+            return "Repeat " + times.ToString() + "{," + childrenStrings + "},";
         }
     }
 
@@ -478,7 +488,12 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "Turn " + turn;
+            if (turn == 'L')
+            { return "Turn " + "left,"; }
+            else if (turn == 'R'){
+                return "Turn " + "right,";
+            }
+            else { throw new Exception("The direction was not left or right"); }
         }
     }
 
@@ -532,7 +547,7 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "Move " + steps.ToString();
+            return "Move " + steps.ToString() + ",";
         }
     }
     public class ConditionalCommand : ICommand
@@ -602,7 +617,7 @@ namespace ScratchMini {
                 childrenStrings += command.ToString();
             }
 
-            return "Repeat while " + condition.ToString() + "(" + childrenStrings + ")";
+            return "Condition " + condition.ToString() + "{," + childrenStrings + "},";
         }
     }
 
@@ -627,7 +642,7 @@ namespace ScratchMini {
         
         public override string ToString()
         {
-            return "is wall ahead";
+            return "Wall";
         }
     }
     public class GridAheadConditionel : IConditional
@@ -644,7 +659,7 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "is grid edge ahead";
+            return "Grid";
         }
     }
     #endregion
