@@ -22,12 +22,28 @@ namespace ScratchMini {
         public Program advanced;
         public Program expert;
         public Program loaded;
+        public ShapeExercise exerciseShape1;
+        public PathFindingExercise exercisePath1;
+
 
         ProgramImporter importer;
 
         public ICommandLine()
         {
             importer = new ProgramImporter();
+
+            bool[,] exercise1Grid = new bool[,]
+            {
+                {false, true, true, true, false },
+                {false, true, false, false, false },
+                {false, true, true, true, false },
+                {false, false, false, true, false },
+                {false, true, true, true , false }
+            };
+
+           
+            
+
 
             IGridObject[,] basicGrid = new IGridObject[3, 3];
             basicGrid[0, 1] = new Player(CardinalDirection.East);

@@ -46,7 +46,7 @@ namespace Scratch_Mini_Forms
         private void SetupDialogue(ScratchMini.Program program)
         {
             UserInputTxtBox.Clear();
-            List <ICommand> commands = program.Commands;
+            List<ICommand> commands = program.Commands;
             string commandText = "";
             foreach (ICommand command in commands)
             {
@@ -60,7 +60,7 @@ namespace Scratch_Mini_Forms
         {
             GridPanel.Controls.Clear();
 
-            int size = program.Grid.GetLength(0);
+            int size = program.field.Grid.GetLength(0); //checken of dit klopt
 
             int pWidth = GridPanel.ClientSize.Width / size;
             int pHeight = GridPanel.ClientSize.Height / size;
@@ -102,6 +102,31 @@ namespace Scratch_Mini_Forms
         }
 
         private void TurnButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripComboBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void choosePathExerciseToolStrip_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chooseShapeExerciseToolStrip_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Exercise1Shape_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exercise1PathFinding_Click(object sender, EventArgs e)
         {
 
         }

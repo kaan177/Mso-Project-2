@@ -9,6 +9,7 @@ namespace Scratch_Mini
 {
     public abstract class IExercise
     {
+        public ScratchMini.Program exerciseProgram;
         public abstract bool CheckIfProgramSuceeded(ScratchMini.Program program);
     }
 
@@ -17,9 +18,10 @@ namespace Scratch_Mini
         bool[,] shape;
         (int, int) StartingPosition;
 
-        public ShapeExercise(bool[,] shape)
+        public ShapeExercise(bool[,] shape, ScratchMini.Program exerciseProgram)
         {
             this.shape = shape;
+            this.exerciseProgram = exerciseProgram;
         }
 
         public override bool CheckIfProgramSuceeded(ScratchMini.Program program)
@@ -47,12 +49,13 @@ namespace Scratch_Mini
         (int, int) EndingPosition;
         CardinalDirection StartingDirection;
 
-        public PathFindingExercise(Field field, (int, int) startingPosition, (int, int) endingPosition, CardinalDirection startingDirection)
+        public PathFindingExercise(Field field, (int, int) startingPosition, (int, int) endingPosition, CardinalDirection startingDirection, ScratchMini.Program exerciseProgram)
         {
             this.field = field;
             StartingPosition = startingPosition;
             EndingPosition = endingPosition;
             StartingDirection = startingDirection;
+            this.exerciseProgram = exerciseProgram;
         }
 
         public override bool CheckIfProgramSuceeded(ScratchMini.Program program)
