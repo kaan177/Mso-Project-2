@@ -26,7 +26,7 @@ namespace Scratch_Mini
         {
             program.field.SetPlayerPosition(StartingPosition.Item1, StartingPosition.Item2);
             bool[,] attemptedShape;
-            program.Execute(out attemptedShape);
+            program.Execute(out attemptedShape ,out _);
             bool returnValue = true;
             for (int i = 0;  i < shape.GetLength(0); i++)
             {
@@ -60,7 +60,7 @@ namespace Scratch_Mini
             field.SetPlayerPosition(StartingPosition.Item1, StartingPosition.Item2);
             field.GetPlayer().CardinalDirection = StartingDirection;
             program.field = field;
-            program.Execute(out _);
+            program.Execute(out _, out _);
             return program.field.GetPlayerPosition() == EndingPosition;
             
         }

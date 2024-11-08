@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TurnButton = new Button();
-            MoveButton = new Button();
-            RepeatButton = new Button();
-            RepeatUntilButton = new Button();
             OutputTxtBox = new TextBox();
             RunProgramButton = new Button();
             MetricsButton = new Button();
@@ -42,48 +38,10 @@
             expertToolStripMenuItem = new ToolStripMenuItem();
             GridPanel = new Panel();
             UserInputTxtBox = new TextBox();
+            textBox1 = new TextBox();
+            button1 = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
-            // 
-            // TurnButton
-            // 
-            TurnButton.BackColor = Color.FromArgb(224, 224, 224);
-            TurnButton.ForeColor = SystemColors.ActiveCaptionText;
-            TurnButton.Location = new Point(314, 43);
-            TurnButton.Name = "TurnButton";
-            TurnButton.Size = new Size(111, 58);
-            TurnButton.TabIndex = 0;
-            TurnButton.Text = "Turn";
-            TurnButton.UseVisualStyleBackColor = false;
-            TurnButton.Click += TurnButton_Click;
-            // 
-            // MoveButton
-            // 
-            MoveButton.Location = new Point(433, 43);
-            MoveButton.Name = "MoveButton";
-            MoveButton.Size = new Size(111, 58);
-            MoveButton.TabIndex = 1;
-            MoveButton.Text = "Move";
-            MoveButton.UseVisualStyleBackColor = true;
-            // 
-            // RepeatButton
-            // 
-            RepeatButton.Location = new Point(197, 43);
-            RepeatButton.Name = "RepeatButton";
-            RepeatButton.RightToLeft = RightToLeft.No;
-            RepeatButton.Size = new Size(111, 58);
-            RepeatButton.TabIndex = 2;
-            RepeatButton.Text = "Repeat";
-            RepeatButton.UseVisualStyleBackColor = true;
-            // 
-            // RepeatUntilButton
-            // 
-            RepeatUntilButton.Location = new Point(551, 43);
-            RepeatUntilButton.Name = "RepeatUntilButton";
-            RepeatUntilButton.Size = new Size(111, 58);
-            RepeatUntilButton.TabIndex = 3;
-            RepeatUntilButton.Text = "RepeatUntil";
-            RepeatUntilButton.UseVisualStyleBackColor = true;
             // 
             // OutputTxtBox
             // 
@@ -113,6 +71,7 @@
             MetricsButton.TabIndex = 6;
             MetricsButton.Text = "Metrics";
             MetricsButton.UseVisualStyleBackColor = true;
+            MetricsButton.Click += MetricsButton_Click;
             // 
             // menuStrip1
             // 
@@ -170,20 +129,36 @@
             UserInputTxtBox.Size = new Size(343, 212);
             UserInputTxtBox.TabIndex = 10;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(551, 330);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(227, 88);
+            textBox1.TabIndex = 11;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(202, 42);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 12;
+            button1.Text = "Reset";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 528);
+            Controls.Add(button1);
+            Controls.Add(textBox1);
             Controls.Add(UserInputTxtBox);
             Controls.Add(GridPanel);
             Controls.Add(MetricsButton);
             Controls.Add(RunProgramButton);
             Controls.Add(OutputTxtBox);
-            Controls.Add(RepeatUntilButton);
-            Controls.Add(RepeatButton);
-            Controls.Add(MoveButton);
-            Controls.Add(TurnButton);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "Form1";
@@ -195,11 +170,6 @@
         }
 
         #endregion
-
-        private Button TurnButton;
-        private Button MoveButton;
-        private Button RepeatButton;
-        private Button RepeatUntilButton;
         private TextBox OutputTxtBox;
         private Button RunProgramButton;
         private Button MetricsButton;
@@ -210,5 +180,7 @@
         private ToolStripMenuItem expertToolStripMenuItem;
         private Panel GridPanel;
         private TextBox UserInputTxtBox;
+        private TextBox textBox1;
+        private Button button1;
     }
 }

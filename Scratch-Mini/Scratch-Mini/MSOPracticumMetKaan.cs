@@ -98,6 +98,11 @@ namespace ScratchMini {
             loaded = importer.Import(input);
         }
 
+        public List<ICommand> LoadCommands(string input)
+        {
+            return importer.StringToCommands(input);
+        }
+
 
         public string GetMetricsProgram(Program program)
         {
@@ -110,6 +115,7 @@ namespace ScratchMini {
         public string name;
         public List <ICommand> Commands;
         public Field field;
+        Field startingField;
 
         public int NumberOfCommands
         {
@@ -154,9 +160,10 @@ namespace ScratchMini {
         {
             Commands = commands;
             this.field = field;
+            startingField = field;
         }
 
-        public string Execute(out bool[,] touchedSpaces)
+        public string Execute(out bool[,] touchedSpaces, out Field outputField)
         {
             Field currentField = field;
             touchedSpaces = new bool[currentField.Grid.GetLength(0), currentField.Grid.GetLength(1)];
@@ -172,10 +179,10 @@ namespace ScratchMini {
             foreach (ICommand command in Commands)
             {
                 currentField = command.executeCommand(currentField);
-                commandLog += command.ToString() + ", ";
                 touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             }
-            field = currentField;
+            outputField = currentField;
+            field = startingField;
             return commandLog;
         }
         
@@ -195,13 +202,13 @@ namespace ScratchMini {
             switch (CardinalDirection)
             {
                 case CardinalDirection.North:
-                    return (x - 1, y);
+                    return (x , y - 1);
                 case CardinalDirection.East:
-                    return (x, y + 1);
-                case CardinalDirection.South:
                     return (x + 1, y);
+                case CardinalDirection.South:
+                    return (x, y + 1);
                 case CardinalDirection.West:
-                    return (x, y - 1);
+                    return (x - 1, y);
                 default:
                     return (x, y);
             }
@@ -380,7 +387,7 @@ namespace ScratchMini {
                 childrenStrings += command.ToString();
             }
 
-            return "Repeat " + times.ToString() + "(" + childrenStrings + ")";
+            return "Repeat " + times.ToString() + "{," + childrenStrings + "},";
         }
     }
 
@@ -423,7 +430,12 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "Turn " + turn;
+            if (turn == 'L')
+            { return "Turn " + "left,"; }
+            else if (turn == 'R'){
+                return "Turn " + "right,";
+            }
+            else { throw new Exception("The direction was not left or right"); }
         }
     }
 
@@ -477,7 +489,7 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "Move " + steps.ToString();
+            return "Move " + steps.ToString() + ",";
         }
     }
     public class ConditionalCommand : ICommand
@@ -547,7 +559,7 @@ namespace ScratchMini {
                 childrenStrings += command.ToString();
             }
 
-            return "Repeat while " + condition.ToString() + "(" + childrenStrings + ")";
+            return "Condition " + condition.ToString() + "{," + childrenStrings + "},";
         }
     }
 
@@ -572,7 +584,7 @@ namespace ScratchMini {
         
         public override string ToString()
         {
-            return "is wall ahead";
+            return "Wall";
         }
     }
     public class GridAheadConditionel : IConditional
@@ -589,7 +601,7 @@ namespace ScratchMini {
 
         public override string ToString()
         {
-            return "is grid edge ahead";
+            return "Grid";
         }
     }
     #endregion

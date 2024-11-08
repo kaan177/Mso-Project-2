@@ -7,6 +7,7 @@ namespace Scratch_Mini_Forms
     public partial class Form1 : Form
     {
         public ICommandLine scratchMini;
+        public ScratchMini.Program activeProgram;
         public Form1()
         {
             InitializeComponent();
@@ -27,23 +28,25 @@ namespace Scratch_Mini_Forms
         private void basicToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.basic);
-
+            activeProgram = scratchMini.basic;
         }
 
         private void advancedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.advanced);
+            activeProgram = scratchMini.advanced;
         }
 
         private void expertToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.expert);
+            activeProgram = scratchMini.expert;
         }
 
         private void ShowProgram(ScratchMini.Program program)
         {
             SetupDialogue(program);
-            SetupGrid(program);
+            SetupGrid(program.field);
         }
 
         private void SetupDialogue(ScratchMini.Program program)
@@ -53,17 +56,15 @@ namespace Scratch_Mini_Forms
             string commandText = "";
             foreach (ICommand command in commands)
             {
-                commandText += command.ToString() + "\n";
+                commandText += command.ToString();
             }
 
             UserInputTxtBox.Text = commandText.TrimEnd();
         }
 
-        private void SetupGrid(ScratchMini.Program program)
+        private void SetupGrid(Field field)
         {
             GridPanel.Controls.Clear();
-
-            Field field = program.field;
 
             int size = field.Grid.GetLength(0);
 
@@ -93,7 +94,7 @@ namespace Scratch_Mini_Forms
                     }
                     else if (field.Grid[x, y] is Wall)
                     {
-                        
+
                         PictureBox picBox = new PictureBox()
                         {
                             Width = pWidth,
@@ -121,7 +122,7 @@ namespace Scratch_Mini_Forms
                     }
                 }
             }
-            
+
         }
 
         private RotateFlipType DetermineRotation(CardinalDirection direction)
@@ -147,7 +148,21 @@ namespace Scratch_Mini_Forms
 
         private void RunProgramButton_Click(object sender, EventArgs e)
         {
+            if (activeProgram != null)
+            {
+                Field field;
+                try
+                {
+                    activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                    textBox1.Text = activeProgram.Execute(out _, out field);
+                    SetupGrid(field);
+                }
+                catch (Exception ex)
+                {
+                    textBox1.Text = ex.Message;
+                }
 
+            }
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -157,7 +172,38 @@ namespace Scratch_Mini_Forms
 
         private void TurnButton_Click(object sender, EventArgs e)
         {
+            try {
+                activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                if (activeProgram != null)
+                {
+                    ShowProgram(activeProgram);
+                }
+            }
+            catch (Exception ex)
+            {
+                textBox1.Text = ex.Message;
+            }
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MetricsButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
+                if (activeProgram != null)
+                {
+                    textBox1.Text = scratchMini.GetMetricsProgram(activeProgram);
+                }
+            }
+            catch (Exception ex)
+            {
+                textBox1.Text = ex.Message;
+            }
         }
     }
 }
