@@ -1,3 +1,4 @@
+using Scratch_Mini;
 using ScratchMini;
 
 namespace Scratch_Mini_Forms
@@ -129,6 +130,34 @@ namespace Scratch_Mini_Forms
         private void exercise1PathFinding_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.exercisePath1.exerciseProgram);
+        }
+
+        private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                try
+                {
+                    string allText = System.IO.File.ReadAllText(filePath);
+                    MessageBox.Show("File selected" + filePath);
+
+                    ProgramImporter programImporter = new ProgramImporter();
+                    ScratchMini.Program importedProgram = programImporter.Import(allText);
+
+                    ShowProgram(importedProgram);
+                }
+
+                catch (Exception ex) 
+                {
+                    MessageBox.Show("Error reading file: " + ex.Message);
+                }
+            }
         }
     }
 }

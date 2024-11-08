@@ -1,4 +1,7 @@
+using Newtonsoft.Json.Bson;
+using Scratch_Mini;
 using ScratchMini;
+
 namespace Scratch_Mini_Tester
 
 {
@@ -65,8 +68,22 @@ namespace Scratch_Mini_Tester
         [Fact]
         public void Program_ExecutesSingleCommand()
         {
+            var grid = new IGridObject[3, 3];
+            grid[0, 0] = new Player(CardinalDirection.East);
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (grid[i, j] == null)
+                    {
+                        grid[i, j] = new EmptySpace();
+                    }
+                }
+            }
+            var field = new Field(grid);
+
             var commands = new List<ICommand> { new MoveCommand(1) };
-            var program = new Program(commands);
+            var program = new Program(commands, new Field(grid));
             var result = program.Execute(out _);
             Assert.Equal("Move 1, ", result);
         }
@@ -74,10 +91,56 @@ namespace Scratch_Mini_Tester
         [Fact]
         public void Program_ExecutesMultipleCommands()
         {
+            var grid = new IGridObject[3, 3];
+            grid[0, 0] = new Player(CardinalDirection.East);
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (grid[i, j] == null)
+                    {
+                        grid[i, j] = new EmptySpace();
+                    }
+                }
+            }
+            var field = new Field(grid);
             var commands = new List<ICommand> { new MoveCommand(1), new TurnCommand('R') };
-            var program = new Program(commands);
+            var program = new Program(commands, new Field(grid));
             var result = program.Execute(out _);
             Assert.Equal("Move 1, Turn R, ", result);
         }
+
+        [Fact]
+
+        public void testNumberOfCommands()
+        {
+            List<ICommand> commands;
+        }
+    }
+
+    public class ShapeExerciseTests
+    {
+        [Fact]
+        public void ShapeExercise_returnsTrue_ifShapeIsCorret()
+        {
+            bool[,] expectedShape = new bool[,]
+            {
+                { true, true, false },
+                { false, true, true },
+                { false, false, true }
+            };
+
+
+        }
+
+        public class PathFindingExerciseTests
+        {
+
+        }
+    }
+
+    public class WinFormTests
+    {
+
     }
 }
