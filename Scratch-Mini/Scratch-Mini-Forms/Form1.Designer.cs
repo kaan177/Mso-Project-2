@@ -42,9 +42,7 @@
             expertToolStripMenuItem = new ToolStripMenuItem();
             GridPanel = new Panel();
             UserInputTxtBox = new TextBox();
-            pictureBox1 = new PictureBox();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // TurnButton
@@ -172,21 +170,11 @@
             UserInputTxtBox.Size = new Size(343, 212);
             UserInputTxtBox.TabIndex = 10;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.ImageLocation = "";
-            pictureBox1.Location = new Point(55, 140);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(257, 200);
-            pictureBox1.TabIndex = 11;
-            pictureBox1.TabStop = false;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 528);
-            Controls.Add(pictureBox1);
             Controls.Add(UserInputTxtBox);
             Controls.Add(GridPanel);
             Controls.Add(MetricsButton);
@@ -202,7 +190,6 @@
             Text = "Form1";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -223,6 +210,5 @@
         private ToolStripMenuItem expertToolStripMenuItem;
         private Panel GridPanel;
         private TextBox UserInputTxtBox;
-        private PictureBox pictureBox1;
     }
 }

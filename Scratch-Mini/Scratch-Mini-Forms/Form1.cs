@@ -76,6 +76,8 @@ namespace Scratch_Mini_Forms
                 {
                     if (field.Grid[x, y] is Player)
                     {
+                        Image image = Resources.guy1;
+                        image.RotateFlip(DetermineRotation(field.GetPlayer().CardinalDirection));
                         PictureBox picBox = new PictureBox()
                         {
                             Width = pWidth,
@@ -83,7 +85,7 @@ namespace Scratch_Mini_Forms
                             BorderStyle = BorderStyle.FixedSingle,
                             Location = new Point(x * pWidth, y * pHeight),
                             BackColor = Color.Yellow,
-                            Image = Resources.guy1,
+                            Image = image,
                             SizeMode = PictureBoxSizeMode.StretchImage
                             //rotateFlip()
                         };
@@ -91,6 +93,7 @@ namespace Scratch_Mini_Forms
                     }
                     else if (field.Grid[x, y] is Wall)
                     {
+                        
                         PictureBox picBox = new PictureBox()
                         {
                             Width = pWidth,
@@ -118,22 +121,24 @@ namespace Scratch_Mini_Forms
                     }
                 }
             }
-            /*PictureBox pictureBox = new PictureBox()
-            {
-                Width = pWidth,
-                Height = pHeight,
-                BorderStyle = BorderStyle.FixedSingle,
-                Location = new Point(program.field.GetPlayerPosition().Item1 * pWidth, program.field.GetPlayerPosition().Item2 * pHeight),
-                BackColor = Color.Yellow,
-                Image = Image.FromFile("C:\\Users\\knpg2\\Documents\\GitHub\\Kario\\Mso-Scratch-Mini\\Mso-Project-2\\Scratch-Mini\\Scratch-Mini-Forms\\Assets\\guy.png"),
-                
-                //rotateFlip()
-            };
-            GridPanel.Controls.Add(pictureBox);
-            pictureBox.BringToFront();*/
+            
         }
 
-
+        private RotateFlipType DetermineRotation(CardinalDirection direction)
+        {
+            switch (direction)
+            {
+                case CardinalDirection.North:
+                    return RotateFlipType.Rotate270FlipNone;
+                case CardinalDirection.South:
+                    return RotateFlipType.Rotate90FlipNone;
+                case CardinalDirection.East:
+                    return RotateFlipType.RotateNoneFlipNone;
+                case CardinalDirection.West:
+                    return RotateFlipType.Rotate180FlipNone;
+            }
+            return RotateFlipType.RotateNoneFlipNone;
+        }
 
         private void OutputTxtBox_TextChanged(object sender, EventArgs e)
         {

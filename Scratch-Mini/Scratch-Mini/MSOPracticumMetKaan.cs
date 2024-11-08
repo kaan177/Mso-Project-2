@@ -30,7 +30,7 @@ namespace ScratchMini {
             importer = new ProgramImporter();
 
             IGridObject[,] basicGrid = new IGridObject[3, 3];
-            basicGrid[0, 1] = new Player(CardinalDirection.East);
+            basicGrid[0, 1] = new Player(CardinalDirection.West);
             basicGrid[1, 2] = new Wall();
             for (int i = 0; i < 3; i++)
             {
