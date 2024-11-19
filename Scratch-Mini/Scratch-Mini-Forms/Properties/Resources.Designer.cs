@@ -71,20 +71,11 @@ namespace Scratch_Mini_Forms.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to guy.png.
-        /// </summary>
-        internal static string guy {
-            get {
-                return ResourceManager.GetString("guy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap guy1 {
+        internal static System.Drawing.Bitmap guy {
             get {
-                object obj = ResourceManager.GetObject("guy1", resourceCulture);
+                object obj = ResourceManager.GetObject("guy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

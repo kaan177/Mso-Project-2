@@ -78,7 +78,7 @@ namespace Scratch_Mini_Forms
                 {
                     if (field.Grid[x, y] is Player)
                     {
-                        Image image = Resources.guy1;
+                        Image image = Resources.guy;
                         image.RotateFlip(DetermineRotation(field.GetPlayer().CardinalDirection));
                         PictureBox picBox = new PictureBox()
                         {
