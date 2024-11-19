@@ -103,7 +103,7 @@ namespace Scratch_Mini_Forms
                             BorderStyle = BorderStyle.FixedSingle,
                             Location = new Point(x * pWidth, y * pHeight),
                             BackColor = Color.Yellow,
-                            Image = Resources.Designer,
+                            Image = Resources.Designer1,
                             SizeMode = PictureBoxSizeMode.StretchImage
                             //rotateFlip()
                         };
