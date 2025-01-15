@@ -4,20 +4,25 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 
-//TO DO: make move command stop when wall
+//Scratch mini is a program where a user can learn programming.
+//This is done in a game format where there is a player that moves around in a grid.
+//This player is controlled by commands provided by the user.
+//To start learning more you should start reading from program.
 
 namespace ScratchMini {
     class MainProgram
     {
-        ICommandLine iCommandLine;
+        IScratchMini iCommandLine;
         public void Main()
         {
-            iCommandLine = new ICommandLine();
+            iCommandLine = new IScratchMini();
         }
     }
     
-
-    public class ICommandLine
+    //This is the scratch mini interface.
+    //This class provides three diffrent programs, 1 shape excercise and 1 Path exersice.
+    //It also provides a function to load programs in
+    public class IScratchMini
     {
         public Program basic;
         public Program advanced;
@@ -29,7 +34,7 @@ namespace ScratchMini {
 
         ProgramImporter importer;
 
-        public ICommandLine()
+        public IScratchMini()
         {
             importer = new ProgramImporter();
 
@@ -168,6 +173,8 @@ namespace ScratchMini {
         }
 
     }
+    //A program is a combination of a field and a list of commands.
+    //Programs provide a execute method and metrics like number of commands.
     public class Program
     {
         public string name;
@@ -220,7 +227,9 @@ namespace ScratchMini {
             this.field = field;
             startingField = field;
         }
-
+        //Execute returns three variables.
+        //The log of the commands, the touched spaces for the excersise and the final field.
+        //It loops over all the commands executing them one by on
         public string Execute(out bool[,] touchedSpaces, out Field outputField)
         {
             Field currentField = field;
@@ -234,45 +243,27 @@ namespace ScratchMini {
             }
             touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             string commandLog = "";
+
+
             foreach (ICommand command in Commands)
             {
                 currentField = command.executeCommand(currentField);
                 touchedSpaces[currentField.GetPlayerPosition().Item1, currentField.GetPlayerPosition().Item2] = true;
             }
+
+
             outputField = currentField;
             field = startingField;
             return commandLog;
         }
         
     }
-    #region Playing Field
 
-    public class Player : IGridObject
-    {
-        public CardinalDirection CardinalDirection;
-        public override string Name { get { return "Player"; } }
-        public Player(CardinalDirection direction)
-        {
-            CardinalDirection = direction;
-        }
-        public (int newX, int newY) PositionInFront(int x, int y)
-        {
-            switch (CardinalDirection)
-            {
-                case CardinalDirection.North:
-                    return (x , y - 1);
-                case CardinalDirection.East:
-                    return (x + 1, y);
-                case CardinalDirection.South:
-                    return (x, y + 1);
-                case CardinalDirection.West:
-                    return (x - 1, y);
-                default:
-                    return (x, y);
-            }
-        }
-    }
-    
+
+    #region Playing Field
+    //A field represents the grid that the player move in.
+    //It has a two dimensional array of gridobjects.
+    //And provides helper functions like get player position and set player position.
     public class Field 
     {
         public IGridObject[,] Grid;
@@ -287,8 +278,6 @@ namespace ScratchMini {
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() },
                 {new EmptySpace(), new EmptySpace(), new EmptySpace() }};
         }
-
-        
         
         public Field(IGridObject[,] grid)
         {
@@ -348,6 +337,34 @@ namespace ScratchMini {
     {
         public abstract string Name {  get; }
     }
+
+    public class Player : IGridObject
+    {
+        //The cardinal direction represents where the player is facing in the grid.
+        public CardinalDirection CardinalDirection;
+        public override string Name { get { return "Player"; } }
+        public Player(CardinalDirection direction)
+        {
+            CardinalDirection = direction;
+        }
+        public (int newX, int newY) PositionInFront(int x, int y)
+        {
+            switch (CardinalDirection)
+            {
+                case CardinalDirection.North:
+                    return (x , y - 1);
+                case CardinalDirection.East:
+                    return (x + 1, y);
+                case CardinalDirection.South:
+                    return (x, y + 1);
+                case CardinalDirection.West:
+                    return (x - 1, y);
+                default:
+                    return (x, y);
+            }
+        }
+    }
+    
     public class EmptySpace : IGridObject
     {
         public override string Name { get { return "Empty Space"; } }
@@ -366,8 +383,12 @@ namespace ScratchMini {
     }
     #endregion
 
-    #region Commands
 
+    #region Commands
+    //Command are what the user provides to move the player.
+    //The most simple commands are move and turn.
+    //And then there are logic commands like repeat a number of times or a while loop with conditionals.
+    //All the commands provide metrics like number of commands or level of nesting.
     public abstract class ICommand
     {
         public abstract int NumberOfCommands {  get; }
@@ -621,6 +642,7 @@ namespace ScratchMini {
         }
     }
 
+    //Conditionals are boolean statements that apply to a field.
     public abstract class IConditional
     {
         public abstract bool CheckIfTrue(Field field);

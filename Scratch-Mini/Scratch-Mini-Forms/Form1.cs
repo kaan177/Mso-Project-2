@@ -7,12 +7,12 @@ namespace Scratch_Mini_Forms
 {
     public partial class Form1 : Form
     {
-        public ICommandLine scratchMini;
+        public IScratchMini scratchMini;
         public ScratchMini.Program activeProgram;
         public Form1()
         {
             InitializeComponent();
-            scratchMini = new ICommandLine();
+            scratchMini = new IScratchMini();
 
         }
 
