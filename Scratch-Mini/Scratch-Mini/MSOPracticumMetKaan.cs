@@ -158,7 +158,9 @@ namespace ScratchMini {
 
         public void LoadProgram(string input)
         {
-            loaded = importer.Import(input);
+            Program importedProgram = importer.Import(input);
+            loaded = importedProgram;
+            
         }
 
         public List<ICommand> LoadCommands(string input)
@@ -284,28 +286,21 @@ namespace ScratchMini {
             Grid = grid;
         }
 
-        public (int,int) GetPlayerPosition()
+        public (int, int) GetPlayerPosition()
         {
-            int playerX = -1;
-            int playerY = -1;
+
             for (int x = 0; x < Grid.GetLength(0); x++)
             {
                 for (int y = 0; y < Grid.GetLength(1); y++)
                 {
-                    if (Grid[x, y].Name == "Player")
+                    
+                    if (Grid[x, y] != null && Grid[x, y].Name == "Player")
                     {
-                        playerX = x; //current x coordinate of the player object
-                        playerY = y; //current y coordinate of the player object
-                        break;
+                        return (x, y); 
                     }
-                } 
+                }
             }
-            if (playerX == -1 || playerY == -1)
-            {
-                throw new Exception("Player not found in grid"); // to stop the initial loop
-            }
-            
-            return (playerX, playerY);
+            throw new Exception("Player not found in grid");
         }
         public void SetPlayerPosition(int playerX, int playerY)
         {
