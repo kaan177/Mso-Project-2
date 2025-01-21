@@ -235,6 +235,7 @@ namespace Scratch_Mini_Forms
                     ScratchMini.Program importedProgram = programImporter.Import(allText);
 
                     ShowProgram(importedProgram);
+                    activeProgram = importedProgram;   
                 }
 
                 catch (Exception ex) 
