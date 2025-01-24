@@ -46,8 +46,7 @@ namespace Scratch_Mini
                     switch (symbol)
                     {
                         case 'O':
-                            grid[x, y] = new EmptySpace();
-                            
+                            grid[x, y] = new EmptySpace(); 
                             break;
                         case '+':
                             grid[x, y] = new Wall();

@@ -38,14 +38,15 @@ namespace Scratch_Mini
                     returnValue = returnValue && !(attemptedShape[i,j] ^ shape[i,j]);
                     
                 }
-            }return returnValue;
+            }
+            return returnValue;
         }
     }
 
     public class PathFindingExercise : IExercise
     {
         
-        (int, int) EndingPosition;
+        public (int, int) EndingPosition;
       
 
         public PathFindingExercise((int, int) endingPosition, ScratchMini.Program exerciseProgram)
@@ -60,7 +61,7 @@ namespace Scratch_Mini
         public override bool CheckIfProgramSuceeded(ScratchMini.Program program)
         {
             
-            program.Execute(out _, out _);
+            //program.Execute(out _, out _); made it so the program executed twice every time during the exercise.
             return program.field.GetPlayerPosition() == EndingPosition;
             
         }

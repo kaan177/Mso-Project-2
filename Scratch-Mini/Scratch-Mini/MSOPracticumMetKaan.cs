@@ -64,9 +64,10 @@ namespace ScratchMini {
 
             IGridObject[,] exercisePathGrid1 = new IGridObject[5, 5];
             exercisePathGrid1[3, 4] = new Player(CardinalDirection.North);
+            exercisePathGrid1[3, 1] = new TargetSpace();
             List <(int, int)> coordinates = new List<(int, int)>
             {
-                (1, 1), (1, 2), (1, 3), (2, 2), (3, 2), (4, 2), (0, 4)
+                (1, 1), (1, 2), (2, 2), (3, 2), (4, 2), (0, 4)
             };
             foreach(var coord in coordinates)
             {
@@ -90,7 +91,7 @@ namespace ScratchMini {
                 }
             }
 
-            exercisePath1 = new PathFindingExercise((0, 5), new Program(new List<ICommand> { }, new Field(exercisePathGrid1)));
+            exercisePath1 = new PathFindingExercise((3, 1), new Program(new List<ICommand> { }, new Field(exercisePathGrid1)));
             
             IGridObject[,] basicGrid = new IGridObject[3, 3];
             basicGrid[0, 1] = new Player(CardinalDirection.West);
@@ -365,6 +366,11 @@ namespace ScratchMini {
         public override string Name { get { return "Empty Space"; } }
     }
 
+    public class TargetSpace : IGridObject
+    {
+        public override string Name { get { return "Target"; } }
+    }
+
     public class Wall : IGridObject
     {
         public override string Name { get { return "Wall"; } }
@@ -494,10 +500,19 @@ namespace ScratchMini {
             }
             else if (turnDirection == 'L')
             {
-                next = ((int)direction - 1) % 4;
+                if ((int)direction == 0)
+                {
+                    next = ((int)direction + 3);
+                }
+                else
+                {
+                    next = ((int)direction - 1) % 4;
+                }
+                
             }
             else { throw new Exception("The direction was not left or right"); }
 
+            //throw new Exception($"directoin: {(CardinalDirection)next}");
             return (CardinalDirection)next;
 
         }

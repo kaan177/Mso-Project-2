@@ -121,6 +121,22 @@ namespace Scratch_Mini_Forms
                         };
                         GridPanel.Controls.Add(picBox);
                     }
+                    else if (field.Grid[x, y] is TargetSpace)
+                    {
+                        Image image = Resources.target;
+                        PictureBox picBox = new PictureBox()
+                        {
+                            Width = pWidth,
+                            Height = pHeight,
+                            BorderStyle = BorderStyle.FixedSingle,
+                            Location = new Point(x * pWidth, y * pHeight),
+                            BackColor = Color.Yellow,
+                            Image = image,
+                            SizeMode = PictureBoxSizeMode.StretchImage
+                            //rotateFlip()
+                        };
+                        GridPanel.Controls.Add(picBox);
+                    }
                 }
             }
 
@@ -157,6 +173,20 @@ namespace Scratch_Mini_Forms
                     activeProgram.Commands = scratchMini.LoadCommands(UserInputTxtBox.Text);
                     textBox1.Text = activeProgram.Execute(out _, out field);
                     SetupGrid(field);
+                    if (activeProgram == scratchMini.exercisePath1.exerciseProgram)
+                    {
+                        textBox1.Text = ((PathFindingExercise)scratchMini.exercisePath1)
+                                        .CheckIfProgramSuceeded(activeProgram)
+                                        ? "Completed"
+                                        : $"Failed Target cods: {scratchMini.exercisePath1.EndingPosition}, your cods: {scratchMini.exercisePath1.exerciseProgram.field.GetPlayerPosition()}";
+                    }
+                    else if (activeProgram == scratchMini.exerciseShape1.exerciseProgram)
+                    {
+                        textBox1.Text = ((ShapeExercise)scratchMini.exerciseShape1)
+                                        .CheckIfProgramSuceeded(activeProgram)
+                                        ? "Completed"
+                                        : "Failed";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -209,11 +239,13 @@ namespace Scratch_Mini_Forms
         private void Exercise1Shape_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.exerciseShape1.exerciseProgram);
+            activeProgram = scratchMini.exerciseShape1.exerciseProgram;
         }
 
         private void exercise1PathFinding_Click(object sender, EventArgs e)
         {
             ShowProgram(scratchMini.exercisePath1.exerciseProgram);
+            activeProgram = scratchMini.exercisePath1.exerciseProgram;
         }
 
         private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
